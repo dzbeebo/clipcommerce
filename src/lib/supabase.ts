@@ -3,15 +3,23 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-// Prioritize new API keys, fallback to legacy keys for backward compatibility
-const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY!
+// Use new Supabase API keys only
+const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY!
 
-// Log which keys are being used (for debugging)
+// Validate that new keys are present
+if (!supabasePublishableKey) {
+  throw new Error('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY is required. Please add it to your .env.local file.')
+}
+if (!supabaseSecretKey) {
+  throw new Error('SUPABASE_SECRET_KEY is required. Please add it to your .env.local file.')
+}
+
+// Log key status in development
 if (process.env.NODE_ENV === 'development') {
   console.log('🔑 Supabase Keys Status:')
-  console.log('  Publishable Key:', process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ? '✅ New (sb_publishable_)' : '⚠️ Legacy (anon)')
-  console.log('  Secret Key:', process.env.SUPABASE_SECRET_KEY ? '✅ New (sb_secret_)' : '⚠️ Legacy (service_role)')
+  console.log('  Publishable Key: ✅ New (sb_publishable_)')
+  console.log('  Secret Key: ✅ New (sb_secret_)')
 }
 
 // Client-side Supabase client (uses publishable key)
