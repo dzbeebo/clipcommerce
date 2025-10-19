@@ -5,13 +5,17 @@ import { useDashboard } from '@/hooks/useDashboard'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { DollarSign, FileText, TrendingUp, Plus, Settings, Search, Clock, CheckCircle, XCircle, ExternalLink } from 'lucide-react'
+import { NotificationCenter } from '@/components/NotificationCenter'
+import { AnalyticsDashboard } from '@/components/analytics/AnalyticsDashboard'
+import { DollarSign, FileText, TrendingUp, Plus, Settings, Search, Clock, CheckCircle, XCircle, ExternalLink, BarChart3 } from 'lucide-react'
 import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
+import { useState } from 'react'
 
 export default function ClipperDashboard() {
   const { user, logout } = useAuth()
   const { data, loading, error, refetch } = useDashboard()
+  const [showAnalytics, setShowAnalytics] = useState(false)
 
   if (!user) {
     return <div>Loading...</div>
@@ -48,21 +52,34 @@ export default function ClipperDashboard() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
+        <div className="max-w-7xl mx-auto mobile-container">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
             <div className="flex items-center space-x-4">
               <div className="h-8 w-8 rounded-lg bg-green-600 flex items-center justify-center">
                 <span className="text-white font-bold text-sm">C</span>
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Clipper Dashboard</h1>
+              <h1 className="mobile-heading text-gray-900">Clipper Dashboard</h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="outline" size="sm">
-                <Settings className="h-4 w-4 mr-2" />
-                Settings
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full sm:w-auto">
+              <NotificationCenter userId={user.id} />
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowAnalytics(!showAnalytics)}
+                className="touch-target"
+              >
+                <BarChart3 className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">
+                  {showAnalytics ? 'Hide Analytics' : 'Show Analytics'}
+                </span>
               </Button>
-              <Button variant="outline" size="sm" onClick={logout}>
-                Logout
+              <Button variant="outline" size="sm" className="touch-target">
+                <Settings className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Settings</span>
+              </Button>
+              <Button variant="outline" size="sm" onClick={logout} className="touch-target">
+                <span className="hidden sm:inline">Logout</span>
+                <span className="sm:hidden">Exit</span>
               </Button>
             </div>
           </div>
@@ -70,19 +87,24 @@ export default function ClipperDashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto mobile-container py-6 sm:py-8">
+        {showAnalytics && (
+          <div className="mb-6 sm:mb-8">
+            <AnalyticsDashboard userRole="CLIPPER" userId={user.id} />
+          </div>
+        )}
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {data.profile.displayName || user.email}!
+        <div className="mb-6 sm:mb-8">
+          <h2 className="mobile-heading text-gray-900 mb-2">
+            Welcome back, {data?.profile?.displayName || user.email}!
           </h2>
-          <p className="text-gray-600">
+          <p className="mobile-text text-gray-600">
             Find creators, submit clips, and start earning money.
           </p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="mobile-grid mb-6 sm:mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Earned</CardTitle>
@@ -142,7 +164,7 @@ export default function ClipperDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card>
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
@@ -150,16 +172,16 @@ export default function ClipperDashboard() {
                 Common tasks to manage your clipper account
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <Button className="w-full justify-start" variant="outline">
+            <CardContent className="mobile-form">
+              <Button className="w-full justify-start touch-target" variant="outline">
                 <Search className="h-4 w-4 mr-2" />
                 Browse Creators
               </Button>
-              <Button className="w-full justify-start" variant="outline">
+              <Button className="w-full justify-start touch-target" variant="outline">
                 <Plus className="h-4 w-4 mr-2" />
                 Submit New Clip
               </Button>
-              <Button className="w-full justify-start" variant="outline">
+              <Button className="w-full justify-start touch-target" variant="outline">
                 <FileText className="h-4 w-4 mr-2" />
                 View Submission History
               </Button>

@@ -120,3 +120,75 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* Mobile-first responsive utilities */
+  .mobile-container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .mobile-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6;
+  }
+  
+  .mobile-text {
+    @apply text-sm sm:text-base;
+  }
+  
+  .mobile-heading {
+    @apply text-xl sm:text-2xl lg:text-3xl font-bold;
+  }
+  
+  .mobile-card {
+    @apply p-4 sm:p-6;
+  }
+  
+  /* Touch-friendly interactive elements */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  /* Mobile navigation improvements */
+  .mobile-nav {
+    @apply fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 sm:hidden;
+  }
+  
+  /* Responsive spacing */
+  .mobile-spacing {
+    @apply space-y-4 sm:space-y-6 lg:space-y-8;
+  }
+  
+  /* Mobile-optimized forms */
+  .mobile-form {
+    @apply space-y-4 sm:space-y-6;
+  }
+  
+  .mobile-input {
+    @apply w-full px-3 py-2 text-base sm:text-sm;
+  }
+  
+  /* Mobile-friendly tables */
+  .mobile-table {
+    @apply block sm:table w-full;
+  }
+  
+  .mobile-table thead {
+    @apply hidden sm:table-header-group;
+  }
+  
+  .mobile-table tbody {
+    @apply block sm:table-row-group;
+  }
+  
+  .mobile-table tr {
+    @apply block border border-gray-200 rounded-lg mb-4 p-4 sm:table-row sm:border-0 sm:rounded-none sm:mb-0 sm:p-0;
+  }
+  
+  .mobile-table td {
+    @apply block text-right sm:table-cell sm:text-left;
+  }
+  
+  .mobile-table td:before {
+    @apply content-[attr(data-label)] float-left font-semibold sm:content-none;
+  }
+}
