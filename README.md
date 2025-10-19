@@ -68,7 +68,7 @@ A two-sided marketplace platform that connects content creators with clippers fo
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/clipcommerce.git
+git clone https://github.com/dzbeebo/clipcommerce.git
 cd clipcommerce
 ```
 
