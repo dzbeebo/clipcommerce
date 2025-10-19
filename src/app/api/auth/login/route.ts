@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Create Supabase session
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     const { data: sessionData, error: sessionError } = await supabase.auth.signInWithPassword({
       email: validatedData.email,
       password: validatedData.password,

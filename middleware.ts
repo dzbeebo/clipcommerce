@@ -48,7 +48,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Verify token with Supabase
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     const { data: { user: authUser }, error } = await supabase.auth.getUser(accessToken)
     
     if (error || !authUser) {

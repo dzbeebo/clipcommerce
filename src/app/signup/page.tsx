@@ -34,7 +34,7 @@ export default function SignupPage() {
               <div className="h-16 w-16 rounded-xl bg-blue-600 flex items-center justify-center mb-4">
                 <Video className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="text-2xl text-gray-900">I'm a Creator</CardTitle>
+              <CardTitle className="text-2xl text-gray-900">I&apos;m a Creator</CardTitle>
               <CardDescription className="text-lg text-gray-600">
                 Manage clippers, automate payments, and grow your reach
               </CardDescription>
@@ -74,7 +74,7 @@ export default function SignupPage() {
               <div className="h-16 w-16 rounded-xl bg-green-600 flex items-center justify-center mb-4">
                 <Scissors className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="text-2xl text-gray-900">I'm a Clipper</CardTitle>
+              <CardTitle className="text-2xl text-gray-900">I&apos;m a Clipper</CardTitle>
               <CardDescription className="text-lg text-gray-600">
                 Find creators, submit clips, and earn money automatically
               </CardDescription>

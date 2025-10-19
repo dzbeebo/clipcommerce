@@ -11,7 +11,7 @@ export interface User {
 
 export async function getCurrentUser(): Promise<User | null> {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const accessToken = cookieStore.get('sb-access-token')?.value
     
     if (!accessToken) {
@@ -19,7 +19,7 @@ export async function getCurrentUser(): Promise<User | null> {
     }
     
     // Verify token with Supabase
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     const { data: { user: authUser }, error } = await supabase.auth.getUser(accessToken)
     
     if (error || !authUser) {

@@ -3,7 +3,7 @@ import { createServerSupabaseClient } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     
     // Sign out from Supabase
     const { error } = await supabase.auth.signOut()

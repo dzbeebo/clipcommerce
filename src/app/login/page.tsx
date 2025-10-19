@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -18,9 +18,12 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const redirectTo = searchParams.get('redirect') || '/'
   const { login } = useAuth()
+  
+  // Get redirect from search params (handled in client component)
+  const redirectTo = typeof window !== 'undefined' 
+    ? new URLSearchParams(window.location.search).get('redirect') || '/'
+    : '/'
 
   const {
     register,
@@ -144,7 +147,7 @@ export default function LoginPage() {
             {/* Sign Up Link */}
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <Link href="/signup" className="text-blue-600 hover:text-blue-500 font-medium">
                   Sign up
                 </Link>

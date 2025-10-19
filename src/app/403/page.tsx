@@ -5,8 +5,9 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertTriangle } from 'lucide-react'
+import { Suspense } from 'react'
 
-export default function ForbiddenPage() {
+function ForbiddenContent() {
   const searchParams = useSearchParams()
   const role = searchParams.get('role')
   const attempted = searchParams.get('attempted')
@@ -87,5 +88,13 @@ export default function ForbiddenPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function ForbiddenPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ForbiddenContent />
+    </Suspense>
   )
 }

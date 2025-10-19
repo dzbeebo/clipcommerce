@@ -1,7 +1,7 @@
 import Stripe from 'stripe'
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-12-18.acacia',
+  apiVersion: '2025-09-30.clover',
 })
 
 // Stripe Connect account creation
@@ -87,7 +87,8 @@ export async function createTransfer({
   return transfer
 }
 
-// Create application fee
+// Create application fee (Note: Application fees are deprecated in Stripe Connect)
+// This function is kept for reference but should not be used in production
 export async function createApplicationFee({
   amount,
   transferId,
@@ -95,11 +96,7 @@ export async function createApplicationFee({
   amount: number
   transferId: string
 }) {
-  const fee = await stripe.applicationFees.create({
-    amount: Math.round(amount * 100), // Convert to cents
-    currency: 'usd',
-    transfer: transferId,
-  })
-
-  return fee
+  // Application fees are deprecated in Stripe Connect
+  // Use platform fees in Connect accounts instead
+  throw new Error('Application fees are deprecated. Use platform fees in Connect accounts instead.')
 }

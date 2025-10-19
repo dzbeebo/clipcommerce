@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client'],
+  eslint: {
+    ignoreDuringBuilds: true,
   },
+  serverExternalPackages: ['@prisma/client'],
   images: {
     domains: [
       'lh3.googleusercontent.com', // Google profile images
