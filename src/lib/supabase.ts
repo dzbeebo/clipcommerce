@@ -3,10 +3,12 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// Use new publishable key if available, fallback to anon key for backward compatibility
+const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY!
 
-// Client-side Supabase client
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Client-side Supabase client (uses publishable key)
+export const supabase = createClient(supabaseUrl, supabasePublishableKey)
 
 // Server-side Supabase client for API routes
 export async function createServerSupabaseClient() {
@@ -14,7 +16,7 @@ export async function createServerSupabaseClient() {
 
   return createServerClient(
     supabaseUrl,
-    supabaseAnonKey,
+    supabaseSecretKey, // Use secret key for server-side operations
     {
       cookies: {
         get(name: string) {
@@ -31,7 +33,7 @@ export async function createServerSupabaseClientForServerComponents() {
 
   return createServerClient(
     supabaseUrl,
-    supabaseAnonKey,
+    supabaseSecretKey, // Use secret key for server-side operations
     {
       cookies: {
         get(name: string) {
