@@ -1,0 +1,345 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER MANAGEMENT WITH ROLE ENFORCEMENT
+// ============================================
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  passwordHash      String?
+  role              Role      @default(CLIPPER)
+  emailVerified     DateTime?
+  stripeAccountId   String?   @unique  // For receiving payouts (both roles)
+  stripeCustomerId  String?   @unique  // For subscriptions (creators only)
+
+  onboardingComplete Boolean  @default(false)
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // Relations (one-to-one with profiles)
+  creatorProfile    CreatorProfile?
+  clipperProfile    ClipperProfile?
+
+  @@index([email])
+  @@index([role])
+}
+
+enum Role {
+  CREATOR
+  CLIPPER
+  ADMIN
+}
+
+// ============================================
+// CREATOR PROFILE
+// ============================================
+
+model CreatorProfile {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Public Profile
+  displayName        String
+  description        String?  @db.Text
+  avatarUrl          String?
+  slug               String   @unique
+
+  // Payment Settings
+  rateAmount         Float    @default(20.00)    // e.g., $20
+  rateViews          Int      @default(1000)     // per 1,000 views
+  payoutMode         PayoutMode @default(ONE_TIME)
+  minPayout          Float    @default(10.00)    // Minimum payout threshold
+
+  // Subscription Info
+  subscriptionTier   SubscriptionTier @default(STARTER)
+  subscriptionStatus SubscriptionStatus @default(TRIALING)
+  stripeSubscriptionId String? @unique
+  currentPeriodEnd   DateTime?
+
+  // Usage Limits (based on tier)
+  maxClippers        Int      @default(10)       // Enforced by subscription tier
+
+  // Metadata
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  clippers           ClipperMembership[]
+  submissions        Submission[]
+
+  @@index([slug])
+  @@index([subscriptionStatus])
+}
+
+enum PayoutMode {
+  ONE_TIME    // Pay once upon approval (MVP)
+  RECURRING   // Pay as views grow (Phase 2)
+}
+
+enum SubscriptionTier {
+  STARTER      // $29/mo, up to 10 clippers
+  PRO          // $79/mo, up to 50 clippers
+  ENTERPRISE   // $199/mo, unlimited clippers
+}
+
+enum SubscriptionStatus {
+  TRIALING     // In free trial period
+  ACTIVE       // Paid and active
+  PAST_DUE     // Payment failed
+  CANCELED     // Subscription canceled
+  INCOMPLETE   // Subscription setup not finished
+}
+
+// ============================================
+// CLIPPER PROFILE
+// ============================================
+
+model ClipperProfile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  displayName       String
+  avatarUrl         String?
+
+  // YouTube OAuth
+  youtubeChannelId  String   @unique
+  youtubeChannelName String
+  youtubeAccessToken String  @db.Text  // Encrypted
+  youtubeRefreshToken String @db.Text  // Encrypted
+  youtubeTokenExpiry DateTime?
+
+  // Stats
+  totalEarned       Float    @default(0)
+  totalSubmissions  Int      @default(0)
+  totalApproved     Int      @default(0)
+  approvalRate      Float    @default(0) // Calculated: approved/total * 100
+
+  // Metadata
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  lastActiveAt      DateTime @default(now())
+
+  // Relations
+  memberships       ClipperMembership[]
+  submissions       Submission[]
+
+  @@index([youtubeChannelId])
+  @@index([approvalRate])
+}
+
+// ============================================
+// CLIPPER-CREATOR RELATIONSHIP
+// ============================================
+
+model ClipperMembership {
+  id          String   @id @default(cuid())
+  creatorId   String
+  clipperId   String
+
+  status      MembershipStatus @default(PENDING)
+  autoApprove Boolean  @default(false)  // Creator can enable auto-approval
+
+  // Timestamps
+  appliedAt   DateTime @default(now())
+  approvedAt  DateTime?
+  rejectedAt  DateTime?
+
+  // Relations
+  creator     CreatorProfile @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  clipper     ClipperProfile @relation(fields: [clipperId], references: [id], onDelete: Cascade)
+
+  @@unique([creatorId, clipperId])
+  @@index([creatorId, status])
+  @@index([clipperId, status])
+}
+
+enum MembershipStatus {
+  PENDING   // Awaiting creator approval
+  ACTIVE    // Approved, can submit clips
+  REJECTED  // Application rejected
+  SUSPENDED // Temporarily suspended by creator
+}
+
+// ============================================
+// SUBMISSIONS & PAYMENTS
+// ============================================
+
+model Submission {
+  id              String   @id @default(cuid())
+  creatorId       String
+  clipperId       String
+
+  // Video Details
+  youtubeVideoId  String
+  videoTitle      String
+  videoThumbnail  String
+  videoPublishedAt DateTime
+  videoUrl        String   // Full YouTube URL
+
+  // View Tracking
+  viewsAtSubmit   Int      // Views when first submitted
+  viewsCurrent    Int      // Most recent view count
+  lastViewUpdate  DateTime @default(now())
+  viewsPaid       Int      @default(0)  // For recurring payments (Phase 2)
+
+  // Status & Workflow
+  status          SubmissionStatus @default(PENDING)
+  submittedAt     DateTime @default(now())
+  reviewedAt      DateTime?
+
+  // Payment Details
+  paymentAmount   Float?   // Total payment calculated
+  platformFee     Float?   // Commission taken by platform
+  clipperNet      Float?   // Net amount paid to clipper
+
+  // Stripe Info
+  stripeTransferId String? @unique
+  paidAt          DateTime?
+
+  // Rejection
+  rejectionReason String?  @db.Text
+
+  // Relations
+  creator         CreatorProfile @relation(fields: [creatorId], references: [id])
+  clipper         ClipperProfile @relation(fields: [clipperId], references: [id])
+  transaction     Transaction?
+
+  @@unique([youtubeVideoId, creatorId])  // Prevent duplicate submissions
+  @@index([creatorId, status])
+  @@index([clipperId, status])
+  @@index([status, submittedAt])
+}
+
+enum SubmissionStatus {
+  PENDING         // Awaiting creator review
+  APPROVED        // Creator approved, payment processing
+  REJECTED        // Creator rejected
+  PAID            // Payment successful
+  PAYMENT_FAILED  // Payment attempt failed
+}
+
+// ============================================
+// TRANSACTIONS & FINANCIAL RECORDS
+// ============================================
+
+model Transaction {
+  id                String   @id @default(cuid())
+  submissionId      String   @unique
+
+  // Financial Details
+  amount            Float    // Total payout amount
+  platformFee       Float    // Commission taken
+  clipperNet        Float    // Net paid to clipper
+  currency          String   @default("usd")
+
+  // Stripe Info
+  stripeTransferId  String   @unique
+  status            TransactionStatus @default(PENDING)
+  failureReason     String?  @db.Text
+
+  // Retry Info (for failed payments)
+  retryCount        Int      @default(0)
+  lastRetryAt       DateTime?
+
+  // Timestamps
+  createdAt         DateTime @default(now())
+  completedAt       DateTime?
+
+  // Relations
+  submission        Submission @relation(fields: [submissionId], references: [id])
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum TransactionStatus {
+  PENDING    // Payment initiated
+  SUCCEEDED  // Payment completed successfully
+  FAILED     // Payment failed
+  REFUNDED   // Payment was refunded
+}
+
+// ============================================
+// PLATFORM SETTINGS (ADMIN)
+// ============================================
+
+model PlatformSettings {
+  id                String   @id @default(cuid())
+  key               String   @unique
+  value             String   @db.Text
+  description       String?
+
+  updatedBy         String?  // Admin user ID
+  updatedAt         DateTime @updatedAt
+
+  @@index([key])
+}
+
+// ============================================
+// NOTIFICATIONS (Phase 2)
+// ============================================
+
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  type        NotificationType
+  title       String
+  message     String   @db.Text
+  actionUrl   String?
+
+  read        Boolean  @default(false)
+  readAt      DateTime?
+
+  createdAt   DateTime @default(now())
+
+  @@index([userId, read])
+  @@index([createdAt])
+}
+
+enum NotificationType {
+  SUBMISSION_APPROVED
+  SUBMISSION_REJECTED
+  PAYMENT_RECEIVED
+  APPLICATION_APPROVED
+  APPLICATION_REJECTED
+  NEW_SUBMISSION
+  PAYMENT_FAILED
+  SUBSCRIPTION_EXPIRING
+}
+
+// ============================================
+// AUDIT LOGS (Security & Compliance)
+// ============================================
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  userRole    Role?
+  action      String   // "user.signup", "submission.approve", "settings.update"
+  resource    String   // "User", "Submission", "PlatformSettings"
+  resourceId  String?
+
+  changes     Json?    // Before/after values
+  ipAddress   String?
+  userAgent   String?
+
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
