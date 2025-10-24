@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase'
-import { prisma } from '@/lib/prisma'
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -57,55 +56,8 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(loginUrl)
     }
 
-    // Get user from database
-    const user = await prisma.user.findUnique({
-      where: { email: authUser.email! },
-      select: {
-        id: true,
-        email: true,
-        role: true,
-        onboardingComplete: true,
-      }
-    })
-
-    if (!user) {
-      // User not found in database, redirect to login
-      const loginUrl = new URL('/login', request.url)
-      return NextResponse.redirect(loginUrl)
-    }
-
-    // Check onboarding completion
-    if (!user.onboardingComplete) {
-      if (user.role === 'CREATOR') {
-        return NextResponse.redirect(new URL('/onboarding/creator/step-1', request.url))
-      } else if (user.role === 'CLIPPER') {
-        return NextResponse.redirect(new URL('/onboarding/clipper/step-1', request.url))
-      }
-    }
-
-    // Role-based access control
-    if (pathname.startsWith('/dashboard') && user.role !== 'CREATOR') {
-      return NextResponse.redirect(new URL('/403?role=clipper&attempted=dashboard', request.url))
-    }
-
-    if (pathname.startsWith('/clipper') && user.role !== 'CLIPPER') {
-      return NextResponse.redirect(new URL('/403?role=creator&attempted=clipper', request.url))
-    }
-
-    if (pathname.startsWith('/admin') && user.role !== 'ADMIN') {
-      return NextResponse.redirect(new URL('/403?role=user&attempted=admin', request.url))
-    }
-
-    // Redirect to appropriate dashboard after login
-    if (pathname === '/login' || pathname === '/signup') {
-      if (user.role === 'CREATOR') {
-        return NextResponse.redirect(new URL('/dashboard', request.url))
-      } else if (user.role === 'CLIPPER') {
-        return NextResponse.redirect(new URL('/clipper', request.url))
-      } else if (user.role === 'ADMIN') {
-        return NextResponse.redirect(new URL('/admin', request.url))
-      }
-    }
+    // Basic authentication check passed
+    // Role-based access control and onboarding checks will be handled in page components
 
     return NextResponse.next()
   } catch (error) {

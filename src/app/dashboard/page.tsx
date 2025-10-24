@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/hooks/useAuth'
 import { useDashboard } from '@/hooks/useDashboard'
+import { WithRoleAccess } from '@/components/auth/withRoleAccess'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -12,7 +13,7 @@ import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
 import { useState } from 'react'
 
-export default function CreatorDashboard() {
+function CreatorDashboardContent() {
   const { user, logout } = useAuth()
   const { data, loading, error, refetch } = useDashboard()
   const [showAnalytics, setShowAnalytics] = useState(false)
@@ -344,5 +345,13 @@ export default function CreatorDashboard() {
         </Card>
       </main>
     </div>
+  )
+}
+
+export default function CreatorDashboard() {
+  return (
+    <WithRoleAccess requiredRole="CREATOR" requireOnboarding={true}>
+      <CreatorDashboardContent />
+    </WithRoleAccess>
   )
 }
