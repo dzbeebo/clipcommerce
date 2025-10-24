@@ -9,7 +9,7 @@ export async function testDatabaseConnection() {
     return { success: true, result }
   } catch (error) {
     console.error('Database connection failed:', error)
-    return { success: false, error: error.message }
+    return { success: false, error: error instanceof Error ? error.message : String(error) }
   }
 }
 
@@ -21,6 +21,6 @@ export async function testUserQuery() {
     return { success: true, count: userCount }
   } catch (error) {
     console.error('User query failed:', error)
-    return { success: false, error: error.message }
+    return { success: false, error: error instanceof Error ? error.message : String(error) }
   }
 }

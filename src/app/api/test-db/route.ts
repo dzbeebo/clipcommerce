@@ -42,7 +42,7 @@ export async function GET() {
     return NextResponse.json({
       success: false,
       error: 'Test failed',
-      details: error.message,
+      details: error instanceof Error ? error.message : String(error),
       env: {
         DATABASE_URL: process.env.DATABASE_URL ? 'Set' : 'Not set',
         NODE_ENV: process.env.NODE_ENV
