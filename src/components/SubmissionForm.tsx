@@ -42,7 +42,7 @@ export function SubmissionForm({ creators, onSubmissionCreated }: SubmissionForm
     if (result.success && result.video && !result.alreadySubmitted) {
       setVerifiedVideo(result)
     } else if (result.alreadySubmitted) {
-      setSubmitError(`This video has already been submitted to ${result.submittedTo.creatorName}`)
+      setSubmitError(`This video has already been submitted to ${result.submittedTo?.creatorName || 'a creator'}`)
     } else {
       setSubmitError(result.error || 'Failed to verify video')
     }

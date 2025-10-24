@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Loader2, Users, DollarSign, FileText, TrendingUp, AlertTriangle, CheckCircle, XCircle, Eye, Settings } from 'lucide-react'
+import { Loader2, Users, DollarSign, FileText, TrendingUp, AlertTriangle, CheckCircle, XCircle, Eye, Settings, Clock } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
 interface AdminStats {

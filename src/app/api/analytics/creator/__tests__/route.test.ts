@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server'
 import { GET } from '../route'
-import { createClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { prisma } from '@/lib/prisma'
 
 // Mock the dependencies
-jest.mock('@/lib/supabase')
+jest.mock('@/lib/supabase-server')
 jest.mock('@/lib/prisma', () => ({
   prisma: {
     creatorProfile: {

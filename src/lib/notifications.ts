@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase-client';
 import { NotificationType } from '@prisma/client';
 
 interface CreateNotificationParams {
@@ -10,7 +10,7 @@ interface CreateNotificationParams {
 }
 
 export class NotificationService {
-  private supabase = createClient();
+  // Use the client-side Supabase instance
 
   async createNotification({
     userId,
@@ -20,7 +20,7 @@ export class NotificationService {
     actionUrl
   }: CreateNotificationParams) {
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await supabase
         .from('Notification')
         .insert({
           userId,

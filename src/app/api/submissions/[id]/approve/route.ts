@@ -4,11 +4,11 @@ import { requireRole } from '@/lib/auth'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await requireRole('CREATOR')
-    const submissionId = params.id
+    const { id: submissionId } = await params
 
     // Get submission with related data
     const submission = await prisma.submission.findUnique({

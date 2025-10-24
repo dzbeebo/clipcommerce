@@ -43,11 +43,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Submission must be approved before payment' }, { status: 400 })
     }
 
-    // Check if already paid
-    if (submission.status === 'PAID') {
-      return NextResponse.json({ error: 'Submission already paid' }, { status: 400 })
-    }
-
     // Calculate payment amounts
     const platformFeeRate = 0.05 // 5% platform fee
     const platformFee = submission.paymentAmount! * platformFeeRate

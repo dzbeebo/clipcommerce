@@ -157,7 +157,7 @@ export default function ClipperDashboard() {
                 {(data.stats.approvalRate || 0).toFixed(1)}%
               </div>
               <p className="text-xs text-muted-foreground">
-                Based on {data.profile.totalSubmissions || 0} submissions
+                Based on {data.stats.approvedSubmissions || 0} approved submissions
               </p>
             </CardContent>
           </Card>

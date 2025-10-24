@@ -4,6 +4,10 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   serverExternalPackages: ['@prisma/client'],
+  // Force port 3000 for consistency
+  env: {
+    PORT: '3000',
+  },
   images: {
     domains: [
       'lh3.googleusercontent.com', // Google profile images

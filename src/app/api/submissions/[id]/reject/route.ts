@@ -4,12 +4,12 @@ import { requireRole } from '@/lib/auth'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await requireRole('CREATOR')
     const { rejectionReason } = await request.json()
-    const submissionId = params.id
+    const { id: submissionId } = await params
 
     if (!rejectionReason || rejectionReason.trim().length === 0) {
       return NextResponse.json({ 

@@ -7,9 +7,11 @@ import { hashPassword } from '@/lib/utils'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    console.log('Received signup data:', body)
     
     // Validate input
     const validatedData = creatorSignupSchema.parse(body)
+    console.log('Validation passed:', validatedData)
     
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -108,15 +110,28 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Creator signup error:', error)
     
+    // Handle Zod validation errors
+    if (error && typeof error === 'object' && 'issues' in error) {
+      console.log('Validation errors:', error.issues)
+      return NextResponse.json(
+        { 
+          error: 'Validation failed', 
+          details: error.issues,
+          message: 'Please check your input data'
+        },
+        { status: 400 }
+      )
+    }
+    
     if (error instanceof Error && error.message.includes('validation')) {
       return NextResponse.json(
-        { error: 'Invalid input data' },
+        { error: 'Invalid input data', details: error.message },
         { status: 400 }
       )
     }
     
     return NextResponse.json(
-      { error: 'Failed to create creator account' },
+      { error: 'Failed to create creator account', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

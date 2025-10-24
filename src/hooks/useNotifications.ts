@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { createClient } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase-client';
 import { Notification, NotificationType } from '@prisma/client';
 
 interface UseNotificationsReturn {
@@ -16,7 +16,7 @@ export function useNotifications(userId?: string): UseNotificationsReturn {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const supabase = createClient();
+  // Use the client-side Supabase instance
 
   // Fetch initial notifications
   const fetchNotifications = useCallback(async () => {

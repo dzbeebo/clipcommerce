@@ -6,7 +6,8 @@ import { headers } from 'next/headers'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.text()
-    const signature = headers().get('stripe-signature')
+    const headersList = await headers()
+    const signature = headersList.get('stripe-signature')
 
     if (!signature) {
       return NextResponse.json({ error: 'No signature provided' }, { status: 400 })
@@ -28,18 +29,12 @@ export async function POST(request: NextRequest) {
     // Handle the event
     switch (event.type) {
       case 'transfer.created':
-        console.log('Transfer created:', event.data.object)
-        break
-
-      case 'transfer.updated':
-        console.log('Transfer updated:', event.data.object)
-        break
-
-      case 'transfer.paid':
+        // Handle successful transfer
         await handleTransferPaid(event.data.object)
         break
 
-      case 'transfer.failed':
+      case 'transfer.updated':
+        // Handle transfer updates (could be failed)
         await handleTransferFailed(event.data.object)
         break
 

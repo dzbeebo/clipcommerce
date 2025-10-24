@@ -27,8 +27,12 @@ export default function CreatorSignupPage() {
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm<CreatorSignupInput>({
     resolver: zodResolver(creatorSignupSchema),
+    defaultValues: {
+      terms: false,
+    },
   })
 
   const password = watch('password', '')
@@ -174,7 +178,8 @@ export default function CreatorSignupPage() {
               <div className="flex items-start space-x-2">
                 <Checkbox
                   id="terms"
-                  {...register('terms')}
+                  checked={watch('terms')}
+                  onCheckedChange={(checked) => setValue('terms', checked as boolean)}
                   className={errors.terms ? 'border-red-500' : ''}
                 />
                 <div className="grid gap-1.5 leading-none">

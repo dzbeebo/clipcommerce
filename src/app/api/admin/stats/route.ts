@@ -43,13 +43,14 @@ export async function GET(request: NextRequest) {
     const recentActivity = await prisma.auditLog.findMany({
       take: 10,
       orderBy: { createdAt: 'desc' },
-      include: {
-        user: {
-          select: {
-            email: true,
-            role: true
-          }
-        }
+      select: {
+        id: true,
+        action: true,
+        resource: true,
+        userId: true,
+        userRole: true,
+        createdAt: true,
+        changes: true
       }
     })
 
@@ -69,9 +70,9 @@ export async function GET(request: NextRequest) {
       type: log.action,
       description: getActivityDescription(log.action, log.resource),
       timestamp: log.createdAt.toISOString(),
-      user: log.user ? {
-        email: log.user.email,
-        role: log.user.role
+      user: log.userId ? {
+        id: log.userId,
+        role: log.userRole
       } : undefined
     }))
 
