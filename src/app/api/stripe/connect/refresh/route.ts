@@ -26,6 +26,15 @@ export async function POST(request: NextRequest) {
     const account = await stripe.accounts.retrieve(user.stripeAccountId)
     const isAccountComplete = account.details_submitted && account.charges_enabled
 
+    // Log account status for debugging
+    console.log('Account status for refresh:', {
+      details_submitted: account.details_submitted,
+      charges_enabled: account.charges_enabled,
+      payouts_enabled: account.payouts_enabled,
+      requirements: account.requirements,
+      disabled_reason: account.requirements?.disabled_reason
+    })
+
     if (isAccountComplete) {
       return NextResponse.json({ 
         error: 'Stripe account is already complete',
