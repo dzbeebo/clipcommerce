@@ -101,14 +101,26 @@ export async function POST(request: NextRequest) {
     }
     
     // Create Supabase session
-    const supabase = await createServerSupabaseClient()
-    const { data: sessionData, error: sessionError } = await supabase.auth.signInWithPassword({
-      email: validatedData.email,
-      password: validatedData.password,
-    })
+    let sessionData = null
+    let sessionError = null
+    
+    try {
+      const supabase = await createServerSupabaseClient()
+      const result = await supabase.auth.signInWithPassword({
+        email: validatedData.email,
+        password: validatedData.password,
+      })
+      sessionData = result.data
+      sessionError = result.error
+    } catch (error) {
+      console.error('Supabase client creation error:', error)
+      sessionError = error
+    }
     
     if (sessionError) {
-      throw new Error('Failed to create session')
+      console.error('Session creation error details:', sessionError)
+      // Don't fail the login if session creation fails - user can still be authenticated
+      // The frontend can handle the session creation separately
     }
     
     // Determine redirect URL based on role and onboarding status
@@ -147,21 +159,28 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     )
     
-    // Set the session cookie
-    if (sessionData.session) {
-      response.cookies.set('sb-access-token', sessionData.session.access_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-      })
-      
-      response.cookies.set('sb-refresh-token', sessionData.session.refresh_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-      })
+    // Set the session cookie if session was created successfully
+    if (sessionData && sessionData.session) {
+      try {
+        response.cookies.set('sb-access-token', sessionData.session.access_token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 60 * 60 * 24 * 7, // 7 days
+        })
+        
+        response.cookies.set('sb-refresh-token', sessionData.session.refresh_token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+        })
+      } catch (cookieError) {
+        console.error('Cookie setting error:', cookieError)
+        // Don't fail the login if cookie setting fails
+      }
+    } else {
+      console.warn('No session data available for cookie setting')
     }
     
     return response

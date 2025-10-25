@@ -7,19 +7,24 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
 // Validate that secret key is present
 if (!supabaseSecretKey) {
-  throw new Error('SUPABASE_SECRET_KEY is required. Please add it to your .env.local file.')
+  console.error('SUPABASE_SECRET_KEY is missing!')
+  throw new Error('SUPABASE_SECRET_KEY is required. Please add it to your environment variables.')
 }
 
 // Validate that service role key is present
 if (!supabaseServiceRoleKey) {
-  throw new Error('SUPABASE_SERVICE_ROLE_KEY is required. Please add it to your .env.local file.')
+  console.error('SUPABASE_SERVICE_ROLE_KEY is missing!')
+  throw new Error('SUPABASE_SERVICE_ROLE_KEY is required. Please add it to your environment variables.')
 }
 
-// Log key status in development
+// Log key status
 if (process.env.NODE_ENV === 'development') {
   console.log('🔑 Supabase Server Keys Status:')
   console.log('  Secret Key: ✅ New (sb_secret_)')
   console.log('  Service Role Key: ✅ Available')
+} else {
+  // In production, just log that keys are available without exposing them
+  console.log('🔑 Supabase Server Keys: ✅ Available')
 }
 
 // Admin client for admin operations (user creation, etc.)
