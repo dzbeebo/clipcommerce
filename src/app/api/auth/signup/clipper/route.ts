@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
     })
     
     // Create Supabase auth user using admin client
+    console.log('Creating Supabase auth user for:', validatedData.email)
     const supabaseAdmin = createSupabaseAdminClient()
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: validatedData.email,
@@ -49,10 +50,13 @@ export async function POST(request: NextRequest) {
     })
     
     if (authError) {
+      console.error('Supabase auth user creation failed:', authError)
       // Rollback database user if Supabase auth fails
       await prisma.user.delete({ where: { id: user.id } })
       throw new Error('Failed to create authentication user')
     }
+    
+    console.log('✅ Supabase auth user created successfully:', authData.user?.id)
     
     // Update user with Supabase auth ID
     await prisma.user.update({
@@ -64,6 +68,7 @@ export async function POST(request: NextRequest) {
     })
     
     // Create session for the user
+    console.log('Creating session for user:', validatedData.email)
     const supabase = await createServerSupabaseClient()
     const { data: sessionData, error: sessionError } = await supabase.auth.signInWithPassword({
       email: validatedData.email,
@@ -71,8 +76,11 @@ export async function POST(request: NextRequest) {
     })
     
     if (sessionError) {
+      console.error('Session creation failed:', sessionError)
       throw new Error('Failed to create session')
     }
+    
+    console.log('✅ Session created successfully')
     
     // Set session cookie
     const response = NextResponse.json(

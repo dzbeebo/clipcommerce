@@ -30,6 +30,7 @@ if (process.env.NODE_ENV === 'development') {
 // Admin client for admin operations (user creation, etc.)
 // Uses the secret key for admin operations
 export function createSupabaseAdminClient() {
+  console.log('Creating Supabase admin client with URL:', supabaseUrl)
   return createClient(supabaseUrl, supabaseSecretKey, {
     auth: {
       autoRefreshToken: false,
