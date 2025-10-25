@@ -3,22 +3,29 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY!
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
 // Validate that secret key is present
 if (!supabaseSecretKey) {
   throw new Error('SUPABASE_SECRET_KEY is required. Please add it to your .env.local file.')
 }
 
+// Validate that service role key is present
+if (!supabaseServiceRoleKey) {
+  throw new Error('SUPABASE_SERVICE_ROLE_KEY is required. Please add it to your .env.local file.')
+}
+
 // Log key status in development
 if (process.env.NODE_ENV === 'development') {
   console.log('🔑 Supabase Server Keys Status:')
   console.log('  Secret Key: ✅ New (sb_secret_)')
+  console.log('  Service Role Key: ✅ Available')
 }
 
 // Admin client for admin operations (user creation, etc.)
-// Uses the new Secret Key instead of legacy service role key
+// Uses the service role key for admin operations
 export function createSupabaseAdminClient() {
-  return createClient(supabaseUrl, supabaseSecretKey, {
+  return createClient(supabaseUrl, supabaseServiceRoleKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false

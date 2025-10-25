@@ -33,3 +33,4 @@ fs.writeFileSync(envPath, updatedEnvContent);
 console.log('✅ Updated .env file with direct Supabase DATABASE_URL');
 console.log('🔗 New URL:', directUrl);
 console.log('🔧 You can now restart the server and test again');
+

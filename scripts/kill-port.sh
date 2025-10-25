@@ -21,3 +21,4 @@ else
 fi
 
 echo "🚀 Port $PORT is now available for use"
+

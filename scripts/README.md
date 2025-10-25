@@ -41,3 +41,4 @@ The project is configured to always use port 3000 for consistency:
 - All scripts default to port 3000
 
 This ensures a consistent development experience and prevents port conflicts.
+

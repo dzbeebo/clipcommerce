@@ -33,3 +33,4 @@ fetch('http://localhost:3000/api/auth/signup/creator', {
 .catch(error => {
   console.error('\n❌ Request failed:', error.message);
 });
+
