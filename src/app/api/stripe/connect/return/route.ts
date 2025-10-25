@@ -5,9 +5,12 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
+    console.log('Stripe Connect return API called')
     const user = await requireAuth()
+    console.log('User:', user.id, user.role, 'Stripe Account ID:', user.stripeAccountId)
     
     if (!user.stripeAccountId) {
+      console.log('❌ No Stripe account found for user')
       return NextResponse.json({ error: 'No Stripe account found for user' }, { status: 400 })
     }
 
@@ -21,6 +24,13 @@ export async function GET(request: NextRequest) {
                            account.charges_enabled && 
                            account.payouts_enabled
 
+    console.log('Account setup status:', {
+      details_submitted: account.details_submitted,
+      charges_enabled: account.charges_enabled,
+      payouts_enabled: account.payouts_enabled,
+      isSetupComplete
+    })
+
     if (isSetupComplete) {
       // Update user's Stripe connection status
       await prisma.user.update({
@@ -30,23 +40,31 @@ export async function GET(request: NextRequest) {
         }
       })
 
+      const redirectUrl = user.role === 'CREATOR' 
+        ? '/onboarding/creator/step-2' 
+        : '/onboarding/clipper/step-3'
+      
+      console.log('✅ Setup complete, redirecting to:', redirectUrl)
+
       return NextResponse.json({
         success: true,
         message: 'Stripe account connected successfully',
         isSetupComplete: true,
-        redirectUrl: user.role === 'CREATOR' 
-          ? '/onboarding/creator/step-2' 
-          : '/onboarding/clipper/step-3'
+        redirectUrl
       })
     } else {
+      const redirectUrl = user.role === 'CREATOR' 
+        ? '/onboarding/creator/step-1' 
+        : '/onboarding/clipper/step-2'
+      
+      console.log('❌ Setup incomplete, redirecting to:', redirectUrl)
+
       return NextResponse.json({
         success: false,
         message: 'Stripe account setup incomplete',
         isSetupComplete: false,
         requirements: account.requirements,
-        redirectUrl: user.role === 'CREATOR' 
-          ? '/onboarding/creator/step-1' 
-          : '/onboarding/clipper/step-2'
+        redirectUrl
       })
     }
 

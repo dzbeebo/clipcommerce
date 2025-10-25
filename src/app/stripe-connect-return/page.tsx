@@ -15,10 +15,12 @@ function StripeConnectReturnContent() {
     const processReturn = async () => {
       try {
         const redirect = searchParams.get('redirect')
+        console.log('Redirect parameter:', redirect)
 
         // Call our API to process the return (no account_id needed in URL)
         const response = await fetch('/api/stripe/connect/return')
         const data = await response.json()
+        console.log('Stripe return API response:', data)
 
         if (!response.ok) {
           throw new Error(data.error || 'Failed to process Stripe return')
@@ -28,9 +30,13 @@ function StripeConnectReturnContent() {
           setStatus('success')
           setMessage('Stripe account connected successfully!')
           
+          // Use the redirect parameter from URL, then API response, then default
+          const finalRedirect = redirect || data.redirectUrl || '/dashboard'
+          console.log('Final redirect URL:', finalRedirect)
+          
           // Redirect after a short delay
           setTimeout(() => {
-            router.push(redirect || data.redirectUrl || '/dashboard')
+            router.push(finalRedirect)
           }, 2000)
         } else {
           setStatus('error')
