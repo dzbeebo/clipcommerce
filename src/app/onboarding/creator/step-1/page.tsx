@@ -40,7 +40,7 @@ export default function CreatorOnboardingStep1() {
             Connect Your Stripe Account
           </h1>
           <p className="text-gray-600">
-            Step 1 of 3 - Set up payments to receive money from clippers
+            Step 1 of 3 - Set up payments to pay clippers for their work
           </p>
         </div>
 
@@ -78,14 +78,14 @@ export default function CreatorOnboardingStep1() {
               Stripe Connect Setup
             </CardTitle>
             <CardDescription>
-              Connect your Stripe account to receive payments from clippers
+              Connect your Stripe account to pay clippers for their work
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="bg-blue-50 p-4 rounded-lg">
               <h3 className="font-semibold text-blue-900 mb-2">Why do I need Stripe?</h3>
               <p className="text-blue-800 text-sm">
-                Stripe Connect allows you to receive payments directly from clippers. 
+                Stripe Connect allows you to pay clippers directly for their approved clips. 
                 We use it to process payments securely and handle all the complex payment logic.
               </p>
             </div>
@@ -99,7 +99,7 @@ export default function CreatorOnboardingStep1() {
                 </li>
                 <li className="flex items-center text-gray-700">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Automatic payouts to your bank account
+                  Automatic payments to clippers
                 </li>
                 <li className="flex items-center text-gray-700">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />

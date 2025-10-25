@@ -500,7 +500,7 @@ export function middleware(request: NextRequest) {
 
 **As a** new creator\
 **I want to** connect my Stripe account\
-**So that** I can receive subscription payments and send payouts to clippers
+**So that** I can pay clippers for their approved clips
 
 **Acceptance Criteria:**
 
@@ -508,7 +508,7 @@ export function middleware(request: NextRequest) {
 -   [ ]  Page displays:
     -   Progress indicator: "Step 1 of 3: Connect Payment Account"
     -   Heading: "Connect Your Stripe Account"
-    -   Description: "You'll use Stripe to receive subscription payments and pay your clippers securely."
+    -   Description: "You'll use Stripe to pay clippers for their approved clips securely."
     -   List of what's needed: "- Business/personal details - Bank account - Tax information"
     -   "Connect with Stripe" button
 -   [ ]  Clicking button triggers Stripe Connect onboarding:
