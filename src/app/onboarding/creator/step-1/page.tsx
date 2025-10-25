@@ -28,6 +28,32 @@ export default function CreatorOnboardingStep1() {
 
       const data = await response.json()
 
+      // Handle case where Stripe account is already connected
+      if (data.error === 'Stripe account already connected') {
+        if (data.isAccountComplete) {
+          toast.success('Stripe account already connected and ready!')
+          router.push('/onboarding/creator/step-2')
+        } else {
+          toast.info('Stripe account connected but needs completion. Redirecting to Stripe...')
+          // Create a new onboarding link for the existing account
+          const refreshResponse = await fetch('/api/stripe/connect/refresh', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              returnUrl: `${window.location.origin}/stripe-connect-return?redirect=/onboarding/creator/step-2`,
+              refreshUrl: `${window.location.origin}/onboarding/creator/step-1`,
+            }),
+          })
+          const refreshData = await refreshResponse.json()
+          if (refreshData.onboardingUrl) {
+            window.location.href = refreshData.onboardingUrl
+          } else {
+            router.push('/onboarding/creator/step-2')
+          }
+        }
+        return
+      }
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to create Stripe Connect account')
       }

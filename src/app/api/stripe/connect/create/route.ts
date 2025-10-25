@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/lib/auth'
-import { createStripeConnectAccount, createStripeConnectOnboardingLink } from '@/lib/stripe'
+import { createStripeConnectAccount, createStripeConnectOnboardingLink, stripe } from '@/lib/stripe'
 import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
@@ -19,10 +19,28 @@ export async function POST(request: NextRequest) {
 
     // Check if user already has a Stripe account
     if (user.stripeAccountId) {
-      return NextResponse.json({ 
-        error: 'Stripe account already connected',
-        stripeAccountId: user.stripeAccountId 
-      }, { status: 400 })
+      // Check if the Stripe account is fully set up
+      try {
+        const account = await stripe.accounts.retrieve(user.stripeAccountId)
+        const isAccountComplete = account.details_submitted && account.charges_enabled
+        
+        return NextResponse.json({ 
+          error: 'Stripe account already connected',
+          stripeAccountId: user.stripeAccountId,
+          isAccountComplete,
+          accountStatus: {
+            details_submitted: account.details_submitted,
+            charges_enabled: account.charges_enabled,
+            payouts_enabled: account.payouts_enabled
+          }
+        }, { status: 200 }) // Return 200 instead of 400 for better UX
+      } catch (stripeError) {
+        console.error('Error checking Stripe account status:', stripeError)
+        return NextResponse.json({ 
+          error: 'Stripe account already connected',
+          stripeAccountId: user.stripeAccountId 
+        }, { status: 200 })
+      }
     }
 
     // Create Stripe Connect account

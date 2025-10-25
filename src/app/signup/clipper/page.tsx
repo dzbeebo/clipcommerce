@@ -123,6 +123,7 @@ export default function ClipperSignupPage() {
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Create a strong password"
+                    autoComplete="new-password"
                     {...register('password')}
                     className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
                   />
@@ -154,6 +155,7 @@ export default function ClipperSignupPage() {
                     id="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
                     placeholder="Confirm your password"
+                    autoComplete="new-password"
                     {...register('confirmPassword')}
                     className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'}
                   />
