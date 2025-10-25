@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Breadcrumbs, breadcrumbConfigs } from '@/components/layout/Breadcrumbs'
+import { PageLoading } from '@/components/ui/loading'
 import { Loader2, CheckCircle, Clock, XCircle, DollarSign, Eye } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -122,18 +123,11 @@ export default function SubmitClipPage() {
   }
 
   if (!user) {
-    return <div>Loading...</div>
+    return <PageLoading message="Verifying access..." />
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-green-600" />
-          <p className="text-gray-600">Loading submission page...</p>
-        </div>
-      </div>
-    )
+    return <PageLoading message="Loading submission page..." />
   }
 
   if (error) {

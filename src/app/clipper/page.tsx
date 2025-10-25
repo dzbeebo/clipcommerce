@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { NotificationCenter } from '@/components/NotificationCenter'
 import { AnalyticsDashboard } from '@/components/analytics/AnalyticsDashboard'
 import { Breadcrumbs, breadcrumbConfigs } from '@/components/layout/Breadcrumbs'
+import { PageLoading } from '@/components/ui/loading'
 import { DollarSign, FileText, TrendingUp, Plus, Settings, Search, Clock, CheckCircle, XCircle, ExternalLink, BarChart3 } from 'lucide-react'
 import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
@@ -19,18 +20,11 @@ export default function ClipperDashboard() {
   const [showAnalytics, setShowAnalytics] = useState(false)
 
   if (!user) {
-    return <div>Loading...</div>
+    return <PageLoading message="Verifying access..." />
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
-        </div>
-      </div>
-    )
+    return <PageLoading message="Loading dashboard..." />
   }
 
   if (error) {
@@ -46,7 +40,7 @@ export default function ClipperDashboard() {
   }
 
   if (!data) {
-    return <div>No data available</div>
+    return <PageLoading message="Preparing dashboard..." />
   }
 
   return (

@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     const user = await requireRole('CLIPPER')
 
-    // Get clipper profile
+    // Get clipper profile with all related data in optimized queries
     const clipperProfile = await prisma.clipperProfile.findUnique({
       where: { userId: user.id },
       include: {
@@ -44,68 +44,73 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Clipper profile not found' }, { status: 404 })
     }
 
+    // Use Promise.all to run multiple queries in parallel
+    const [
+      activeSubmissions,
+      recentActivity,
+      lastMonthEarnings,
+      newSubmissionsThisMonth
+    ] = await Promise.all([
+      // Active submissions count
+      prisma.submission.count({
+        where: {
+          clipperId: clipperProfile.id,
+          status: 'PENDING'
+        }
+      }),
+      // Recent activity (limit to 5)
+      prisma.submission.findMany({
+        where: {
+          clipperId: clipperProfile.id
+        },
+        include: {
+          creator: {
+            select: {
+              displayName: true,
+              avatarUrl: true,
+            }
+          }
+        },
+        orderBy: { submittedAt: 'desc' },
+        take: 5
+      }),
+      // Last month earnings
+      prisma.transaction.aggregate({
+        where: {
+          submission: {
+            clipperId: clipperProfile.id
+          },
+          status: 'SUCCEEDED',
+          createdAt: {
+            gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // 30 days ago
+          }
+        },
+        _sum: {
+          clipperNet: true
+        }
+      }),
+      // New submissions this month
+      prisma.submission.count({
+        where: {
+          clipperId: clipperProfile.id,
+          submittedAt: {
+            gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // 30 days ago
+          }
+        }
+      })
+    ])
+
     // Calculate stats
     const totalEarned = clipperProfile.totalEarned
-    const activeSubmissions = await prisma.submission.count({
-      where: {
-        clipperId: clipperProfile.id,
-        status: 'PENDING'
-      }
-    })
-
     const approvedClips = clipperProfile.totalApproved
     const approvalRate = clipperProfile.approvalRate
 
-    // Get recent activity
-    const recentActivity = await prisma.submission.findMany({
-      where: {
-        clipperId: clipperProfile.id
-      },
-      include: {
-        creator: {
-          select: {
-            displayName: true,
-            avatarUrl: true,
-          }
-        }
-      },
-      orderBy: { submittedAt: 'desc' },
-      take: 5
-    })
-
-    // Calculate monthly growth
-    const lastMonth = new Date()
-    lastMonth.setMonth(lastMonth.getMonth() - 1)
-
-    const lastMonthEarnings = await prisma.transaction.aggregate({
-      where: {
-        submission: {
-          clipperId: clipperProfile.id
-        },
-        status: 'SUCCEEDED',
-        createdAt: {
-          gte: lastMonth
-        }
-      },
-      _sum: {
-        clipperNet: true
-      }
-    })
-
+    // Calculate growth percentage
     const currentMonthEarnings = lastMonthEarnings._sum.clipperNet || 0
     const previousMonthEarnings = totalEarned - currentMonthEarnings
     const growthPercentage = previousMonthEarnings > 0 
       ? ((currentMonthEarnings - previousMonthEarnings) / previousMonthEarnings) * 100 
       : 0
-
-    const newSubmissionsThisMonth = await prisma.submission.count({
-      where: {
-        clipperId: clipperProfile.id,
-        submittedAt: {
-          gte: lastMonth
-        }
-      }
-    })
 
     return NextResponse.json({
       stats: {

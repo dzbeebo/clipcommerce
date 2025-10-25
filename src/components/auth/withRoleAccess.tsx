@@ -2,6 +2,7 @@
 
 import { ReactNode } from 'react'
 import { useRoleAccess } from '@/hooks/useRoleAccess'
+import { PageLoading } from '@/components/ui/loading'
 
 interface WithRoleAccessProps {
   children: ReactNode
@@ -25,7 +26,7 @@ export function WithRoleAccess({
   })
 
   if (loading) {
-    return <div>Loading...</div>
+    return <PageLoading message="Verifying access..." />
   }
 
   if (!hasAccess) {

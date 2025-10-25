@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
     }
 
-    // Get creator profile
+    // Get creator profile with all related data in optimized queries
     console.log('Looking for creator profile for user:', user.id)
     const creatorProfile = await prisma.creatorProfile.findUnique({
       where: { userId: user.id },
@@ -58,79 +58,96 @@ export async function GET(request: NextRequest) {
     
     console.log('✅ Creator profile found:', creatorProfile.id)
 
-    // Calculate stats
-    const totalPaidOut = await prisma.transaction.aggregate({
-      where: {
-        submission: {
+    // Use Promise.all to run multiple queries in parallel
+    const [
+      totalPaidOut,
+      pendingSubmissions,
+      approvedSubmissions,
+      totalViews,
+      recentActivity,
+      lastMonthPaidOut,
+      newClippersThisMonth
+    ] = await Promise.all([
+      // Total paid out
+      prisma.transaction.aggregate({
+        where: {
+          submission: {
+            creatorId: creatorProfile.id
+          },
+          status: 'SUCCEEDED'
+        },
+        _sum: {
+          amount: true
+        }
+      }),
+      // Pending submissions count
+      prisma.submission.count({
+        where: {
+          creatorId: creatorProfile.id,
+          status: 'PENDING'
+        }
+      }),
+      // Approved submissions count
+      prisma.submission.count({
+        where: {
+          creatorId: creatorProfile.id,
+          status: 'APPROVED'
+        }
+      }),
+      // Total views
+      prisma.submission.aggregate({
+        where: {
+          creatorId: creatorProfile.id,
+          status: { in: ['APPROVED', 'PAID'] }
+        },
+        _sum: {
+          viewsCurrent: true
+        }
+      }),
+      // Recent activity (limit to 5)
+      prisma.submission.findMany({
+        where: {
           creatorId: creatorProfile.id
         },
-        status: 'SUCCEEDED'
-      },
-      _sum: {
-        amount: true
-      }
-    })
-
-    const pendingSubmissions = await prisma.submission.count({
-      where: {
-        creatorId: creatorProfile.id,
-        status: 'PENDING'
-      }
-    })
-
-    const approvedSubmissions = await prisma.submission.count({
-      where: {
-        creatorId: creatorProfile.id,
-        status: 'APPROVED'
-      }
-    })
-
-    const totalViews = await prisma.submission.aggregate({
-      where: {
-        creatorId: creatorProfile.id,
-        status: { in: ['APPROVED', 'PAID'] }
-      },
-      _sum: {
-        viewsCurrent: true
-      }
-    })
-
-    // Get recent activity
-    const recentActivity = await prisma.submission.findMany({
-      where: {
-        creatorId: creatorProfile.id
-      },
-      include: {
-        clipper: {
-          select: {
-            displayName: true,
-            avatarUrl: true,
+        include: {
+          clipper: {
+            select: {
+              displayName: true,
+              avatarUrl: true,
+            }
+          }
+        },
+        orderBy: { submittedAt: 'desc' },
+        take: 5
+      }),
+      // Last month paid out
+      prisma.transaction.aggregate({
+        where: {
+          submission: {
+            creatorId: creatorProfile.id
+          },
+          status: 'SUCCEEDED',
+          createdAt: {
+            gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // 30 days ago
+          }
+        },
+        _sum: {
+          amount: true
+        }
+      }),
+      // New clippers this month
+      prisma.clipperMembership.count({
+        where: {
+          creatorId: creatorProfile.id,
+          status: 'ACTIVE',
+          approvedAt: {
+            gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // 30 days ago
           }
         }
-      },
-      orderBy: { submittedAt: 'desc' },
-      take: 5
-    })
+      })
+    ])
 
-    // Calculate monthly growth
-    const lastMonth = new Date()
-    lastMonth.setMonth(lastMonth.getMonth() - 1)
-
-    const lastMonthPaidOut = await prisma.transaction.aggregate({
-      where: {
-        submission: {
-          creatorId: creatorProfile.id
-        },
-        status: 'SUCCEEDED',
-        createdAt: {
-          gte: lastMonth
-        }
-      },
-      _sum: {
-        amount: true
-      }
-    })
-
+    // Calculate growth percentage
     const currentMonthPaidOut = totalPaidOut._sum.amount || 0
     const previousMonthPaidOut = lastMonthPaidOut._sum.amount || 0
     const growthPercentage = previousMonthPaidOut > 0 
@@ -138,15 +155,6 @@ export async function GET(request: NextRequest) {
       : 0
 
     const activeClippersCount = creatorProfile.clippers.length
-    const newClippersThisMonth = await prisma.clipperMembership.count({
-      where: {
-        creatorId: creatorProfile.id,
-        status: 'ACTIVE',
-        approvedAt: {
-          gte: lastMonth
-        }
-      }
-    })
 
     return NextResponse.json({
       stats: {

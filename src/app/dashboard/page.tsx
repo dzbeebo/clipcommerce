@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { NotificationCenter } from '@/components/NotificationCenter'
 import { AnalyticsDashboard } from '@/components/analytics/AnalyticsDashboard'
 import { Breadcrumbs, breadcrumbConfigs } from '@/components/layout/Breadcrumbs'
+import { PageLoading, InlineLoading } from '@/components/ui/loading'
 import { DollarSign, Users, FileText, TrendingUp, Plus, Settings, Clock, CheckCircle, XCircle, ExternalLink, BarChart3 } from 'lucide-react'
 import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
@@ -24,14 +25,7 @@ function CreatorDashboardContent() {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
-        </div>
-      </div>
-    )
+    return <PageLoading message="Loading dashboard..." />
   }
 
   if (error) {
@@ -47,7 +41,7 @@ function CreatorDashboardContent() {
   }
 
   if (!data) {
-    return <div>No data available</div>
+    return <PageLoading message="Preparing dashboard..." />
   }
 
   return (
@@ -366,14 +360,7 @@ function ClipperDashboardContent() {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
-        </div>
-      </div>
-    )
+    return <PageLoading message="Loading dashboard..." />
   }
 
   if (error) {
@@ -389,7 +376,7 @@ function ClipperDashboardContent() {
   }
 
   if (!data) {
-    return <div>No data available</div>
+    return <PageLoading message="Preparing dashboard..." />
   }
 
   return (
@@ -713,13 +700,10 @@ function DashboardContent() {
   const { user } = useAuth()
   const [showAnalytics, setShowAnalytics] = useState(false)
 
-  if (!user) {
-    return <div>Loading...</div>
-  }
-
-  if (user.role === 'CREATOR') {
+  // No need for loading check here since WithRoleAccess already handles it
+  if (user?.role === 'CREATOR') {
     return <CreatorDashboardContent />
-  } else if (user.role === 'CLIPPER') {
+  } else if (user?.role === 'CLIPPER') {
     return <ClipperDashboardContent />
   }
 
