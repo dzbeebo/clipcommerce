@@ -4,5 +4,6 @@ export { supabase } from './supabase-client'
 // Re-export server-side Supabase clients
 export { 
   createServerSupabaseClient, 
-  createServerSupabaseClientForServerComponents 
+  createServerSupabaseClientForServerComponents,
+  createSupabaseAdminClient
 } from './supabase-server'

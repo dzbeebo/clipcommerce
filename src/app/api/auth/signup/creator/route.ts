@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient, createSupabaseAdminClient } from '@/lib/supabase'
 import { prisma } from '@/lib/prisma'
 import { creatorSignupSchema } from '@/lib/validations'
 import { hashPassword } from '@/lib/utils'
@@ -38,9 +38,9 @@ export async function POST(request: NextRequest) {
       }
     })
     
-    // Create Supabase auth user
-    const supabase = await createServerSupabaseClient()
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    // Create Supabase auth user using admin client
+    const supabaseAdmin = createSupabaseAdminClient()
+    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: validatedData.email,
       password: validatedData.password,
       email_confirm: true, // Auto-confirm for MVP
@@ -66,6 +66,7 @@ export async function POST(request: NextRequest) {
     })
     
     // Create session for the user
+    const supabase = await createServerSupabaseClient()
     const { data: sessionData, error: sessionError } = await supabase.auth.signInWithPassword({
       email: validatedData.email,
       password: validatedData.password,
