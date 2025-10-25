@@ -230,17 +230,41 @@ npm run db:seed      # Seed database with test data
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
-1. Connect your GitHub repository to Vercel
-2. Configure environment variables in Vercel dashboard
-3. Deploy automatically on push to main branch
+### Vercel (Recommended) - GitHub Integration
 
-### Environment Variables for Production
-Ensure all environment variables are set in your production environment:
-- Supabase production credentials
-- Stripe production keys
-- YouTube API production credentials
-- Production encryption key
+**Production deployment is fully automated through GitHub integration:**
+
+1. **Connect GitHub Repository to Vercel:**
+   - Import your GitHub repository in Vercel dashboard
+   - Select the main branch for production deployments
+   - Configure build settings and environment variables
+
+2. **Automatic Deployment Process:**
+   - Every push to `main` branch triggers production deployment
+   - Pull requests create preview deployments for testing
+   - No manual deployment commands required
+
+3. **Environment Variables for Production:**
+   - Configure all production environment variables in Vercel dashboard
+   - Supabase production credentials
+   - Stripe production keys
+   - YouTube API production credentials
+   - Production encryption key
+
+4. **Monitoring and Management:**
+   - Access Vercel environment through Vercel MCP server
+   - Monitor deployments, logs, and performance metrics
+   - View build logs and deployment status programmatically
+   - Manage environment variables and project settings
+
+### Vercel MCP Server Integration
+
+The project includes integration with Vercel's MCP (Model Context Protocol) server for enhanced deployment management:
+
+- **Deployment Monitoring:** Real-time deployment status, build logs, and error tracking
+- **Project Management:** Environment variable management, team access, and project settings
+- **Performance Analytics:** Usage statistics, performance metrics, and optimization insights
+- **Automated Workflows:** Integration with development workflows and CI/CD processes
 
 ## 🤝 Contributing
 

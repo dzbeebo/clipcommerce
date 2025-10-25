@@ -67,20 +67,31 @@ NODE_ENV="production"
 
 ## Deployment Options
 
-### Vercel (Recommended)
+### Vercel (Recommended) - GitHub Integration
 
-1. **Connect your repository to Vercel:**
-   ```bash
-   npm i -g vercel
-   vercel
-   ```
+**Production deployment is automated through GitHub integration with Vercel:**
 
-2. **Configure environment variables in Vercel dashboard**
+1. **Connect GitHub Repository to Vercel:**
+   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Select the main branch for production deployments
 
-3. **Deploy:**
-   ```bash
-   vercel --prod
-   ```
+2. **Configure Environment Variables:**
+   - In Vercel dashboard, go to Project Settings > Environment Variables
+   - Add all required production environment variables
+   - Ensure variables are set for Production environment
+
+3. **Automatic Deployment:**
+   - Every push to the `main` branch automatically triggers a production deployment
+   - Pull requests create preview deployments for testing
+   - No manual deployment commands needed
+
+4. **Monitoring and Management:**
+   - Access Vercel environment through the Vercel MCP server
+   - Monitor deployments, logs, and performance metrics
+   - View build logs and deployment status
+   - Manage environment variables and settings
 
 ### Docker
 
@@ -294,7 +305,10 @@ NODE_ENV="production"
 
 ### Logs
 
-- **Vercel:** Check function logs in dashboard
+- **Vercel:** 
+  - Check function logs in Vercel dashboard
+  - Use Vercel MCP server to access deployment logs programmatically
+  - Monitor build logs and runtime logs through MCP integration
 - **Docker:** `docker logs container-name`
 - **PM2:** `pm2 logs clipcommerce`
 
@@ -330,10 +344,42 @@ NODE_ENV="production"
 4. **Monitor for issues**
 5. **Rollback plan ready**
 
+## Vercel MCP Server Integration
+
+### Accessing Vercel Environment
+
+The project includes integration with Vercel's MCP (Model Context Protocol) server for programmatic access to:
+
+- **Deployment Management:**
+  - List all deployments and their status
+  - Get deployment details and build logs
+  - Monitor deployment progress in real-time
+  - Access deployment URLs and metadata
+
+- **Project Management:**
+  - View project configuration and settings
+  - Manage environment variables
+  - Check team and organization details
+  - Monitor project performance metrics
+
+- **Logging and Monitoring:**
+  - Access build logs for debugging
+  - View function logs and runtime errors
+  - Monitor performance and usage statistics
+  - Track deployment history and changes
+
+### Using Vercel MCP Server
+
+The MCP server provides programmatic access to Vercel's platform, allowing for:
+- Automated deployment monitoring
+- Integration with development workflows
+- Real-time status updates
+- Centralized management of multiple projects
+
 ## Support
 
 For deployment issues:
 - Check the troubleshooting section
-- Review logs for errors
+- Review logs for errors using Vercel MCP server
 - Contact support team
 - Create GitHub issue with details
