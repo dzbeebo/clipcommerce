@@ -37,12 +37,25 @@ export default function CreatorOnboardingStep2() {
   const onSubmit = async (data: CreatorProfileInput) => {
     setIsLoading(true)
     try {
-      // TODO: Implement profile creation API
+      const response = await fetch('/api/creator/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to create profile')
+      }
+
       toast.success('Profile created successfully!')
       router.push('/onboarding/creator/step-3')
     } catch (error) {
       console.error('Profile creation error:', error)
-      toast.error('Failed to create profile')
+      toast.error(error instanceof Error ? error.message : 'Failed to create profile')
     } finally {
       setIsLoading(false)
     }

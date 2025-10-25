@@ -4,7 +4,13 @@ import { requireRole } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await requireRole('CREATOR')
+    let user
+    try {
+      user = await requireRole('CREATOR')
+    } catch (authError) {
+      console.error('Authentication error:', authError)
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
+    }
 
     // Get creator profile
     const creatorProfile = await prisma.creatorProfile.findUnique({
