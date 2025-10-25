@@ -14,9 +14,38 @@ export default function ClipperOnboardingStep3() {
   const handleCompleteSetup = async () => {
     setIsLoading(true)
     try {
-      // TODO: Mark onboarding as complete
+      // Create clipper profile first
+      const profileResponse = await fetch('/api/clipper/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          displayName: 'Clipper', // Default name, can be updated later
+          youtubeChannelName: 'Connected Channel', // This should come from the actual YouTube connection
+        }),
+      })
+
+      if (!profileResponse.ok) {
+        const errorData = await profileResponse.json()
+        throw new Error(errorData.error || 'Failed to create clipper profile')
+      }
+
+      // Mark onboarding as complete
+      const completeResponse = await fetch('/api/onboarding/complete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!completeResponse.ok) {
+        const errorData = await completeResponse.json()
+        throw new Error(errorData.error || 'Failed to complete onboarding')
+      }
+
       toast.success('Setup completed successfully!')
-      router.push('/clipper')
+      router.push('/dashboard')
     } catch (error) {
       console.error('Setup completion error:', error)
       toast.error('Failed to complete setup')

@@ -88,6 +88,7 @@ export default function LoginPage() {
                   id="email"
                   type="email"
                   placeholder="you@example.com"
+                  autoComplete="username"
                   {...register('email')}
                   className={errors.email ? 'border-red-500' : ''}
                 />
