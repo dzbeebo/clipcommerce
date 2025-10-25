@@ -14,9 +14,26 @@ export default function ClipperOnboardingStep2() {
   const handleConnectStripe = async () => {
     setIsLoading(true)
     try {
-      // TODO: Implement Stripe Connect integration for clippers
-      toast.success('Stripe account connected!')
-      router.push('/onboarding/clipper/step-3')
+      // Create Stripe Connect account and get onboarding URL
+      const response = await fetch('/api/stripe/connect/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          returnUrl: `${window.location.origin}/api/stripe/connect/return?redirect=/onboarding/clipper/step-3`,
+          refreshUrl: `${window.location.origin}/onboarding/clipper/step-2`,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create Stripe Connect account')
+      }
+
+      // Redirect to Stripe onboarding
+      window.location.href = data.onboardingUrl
     } catch (error) {
       console.error('Stripe connection error:', error)
       toast.error('Failed to connect Stripe account')
