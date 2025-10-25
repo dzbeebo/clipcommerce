@@ -7,16 +7,10 @@ import { Video, Scissors, ArrowRight, CheckCircle } from 'lucide-react'
 
 export default function SignupPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center py-12 px-4">
+    <div className="bg-gradient-to-b from-blue-50 to-white flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-6xl">
-        {/* Header */}
+        {/* Page Header */}
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="h-10 w-10 rounded-lg bg-blue-600 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">C</span>
-            </div>
-            <span className="text-2xl font-bold text-gray-900">ClipCommerce</span>
-          </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Join ClipCommerce
           </h1>

@@ -53,16 +53,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center py-12 px-4">
+    <div className="bg-gradient-to-b from-gray-50 to-white flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
-        {/* Header */}
+        {/* Page Header */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="h-10 w-10 rounded-lg bg-blue-600 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">C</span>
-            </div>
-            <span className="text-2xl font-bold text-gray-900">ClipCommerce</span>
-          </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Welcome Back
           </h1>

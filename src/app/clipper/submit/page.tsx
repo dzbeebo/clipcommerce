@@ -6,6 +6,7 @@ import { SubmissionForm } from '@/components/SubmissionForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Breadcrumbs, breadcrumbConfigs } from '@/components/layout/Breadcrumbs'
 import { Loader2, CheckCircle, Clock, XCircle, DollarSign, Eye } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -148,21 +149,26 @@ export default function SubmitClipPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Submit Clips</h1>
-              <p className="text-gray-600">Submit your YouTube videos to creators for payment</p>
-            </div>
+    <div className="bg-gray-50">
+      {/* Breadcrumbs */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <Breadcrumbs items={breadcrumbConfigs['/clipper/submit']} />
+        </div>
+      </div>
+
+      {/* Page Header */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Submit Clips</h1>
+            <p className="text-gray-600">Submit your YouTube videos to creators for payment</p>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Submission Form */}
           <div className="lg:col-span-2">
@@ -269,7 +275,7 @@ export default function SubmitClipPage() {
             </Card>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   )
 }

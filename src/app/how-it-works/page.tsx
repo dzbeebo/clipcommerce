@@ -3,32 +3,18 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Breadcrumbs, breadcrumbConfigs } from '@/components/layout/Breadcrumbs'
 import { CheckCircle, Users, DollarSign, BarChart3, ArrowRight, Play, Shield, Zap } from 'lucide-react'
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
-                <span className="text-white font-bold text-lg">C</span>
-              </div>
-              <span className="text-xl font-bold">ClipCommerce</span>
-            </Link>
-            <div className="flex items-center space-x-4">
-              <Link href="/login">
-                <Button variant="outline">Sign In</Button>
-              </Link>
-              <Link href="/signup">
-                <Button>Get Started</Button>
-              </Link>
-            </div>
-          </div>
+    <div className="bg-white">
+      {/* Breadcrumbs */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <Breadcrumbs items={breadcrumbConfigs['/how-it-works']} />
         </div>
-      </header>
+      </div>
 
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-b from-blue-50 to-white">

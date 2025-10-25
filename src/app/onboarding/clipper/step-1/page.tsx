@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Breadcrumbs, breadcrumbConfigs } from '@/components/layout/Breadcrumbs'
 import { ArrowRight, Youtube, Shield, CheckCircle } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -26,23 +27,25 @@ export default function ClipperOnboardingStep1() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center py-12 px-4">
-      <div className="w-full max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="h-10 w-10 rounded-lg bg-green-600 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">C</span>
-            </div>
-            <span className="text-2xl font-bold text-gray-900">ClipCommerce</span>
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Connect Your YouTube Channel
-          </h1>
-          <p className="text-gray-600">
-            Step 1 of 3 - Verify ownership of your YouTube channel
-          </p>
+    <div className="bg-gradient-to-b from-green-50 to-white">
+      {/* Breadcrumbs */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <Breadcrumbs items={breadcrumbConfigs['/onboarding/clipper/step-1']} />
         </div>
+      </div>
+
+      <div className="flex items-center justify-center py-12 px-4">
+        <div className="w-full max-w-2xl">
+          {/* Page Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Connect Your YouTube Channel
+            </h1>
+            <p className="text-gray-600">
+              Step 1 of 3 - Verify ownership of your YouTube channel
+            </p>
+          </div>
 
         {/* Progress Indicator */}
         <div className="flex items-center justify-center mb-8">
@@ -134,6 +137,7 @@ export default function ClipperOnboardingStep1() {
             </div>
           </CardContent>
         </Card>
+        </div>
       </div>
     </div>
   )

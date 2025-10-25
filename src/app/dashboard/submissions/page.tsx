@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Breadcrumbs, breadcrumbConfigs } from '@/components/layout/Breadcrumbs'
 import { Loader2, CheckCircle, XCircle, Clock, DollarSign, Eye, ThumbsUp, MessageCircle, ExternalLink, AlertTriangle } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -249,21 +250,26 @@ export default function SubmissionsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Clip Submissions</h1>
-              <p className="text-gray-600">Review and manage clip submissions from your clippers</p>
-            </div>
+    <div className="bg-gray-50">
+      {/* Breadcrumbs */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <Breadcrumbs items={breadcrumbConfigs['/dashboard/submissions']} />
+        </div>
+      </div>
+
+      {/* Page Header */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Clip Submissions</h1>
+            <p className="text-gray-600">Review and manage clip submissions from your clippers</p>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {submissions.length > 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {submissions.map((submission) => (
@@ -465,7 +471,7 @@ export default function SubmissionsPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </main>
+      </div>
     </div>
   )
 }

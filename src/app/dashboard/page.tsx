@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { NotificationCenter } from '@/components/NotificationCenter'
 import { AnalyticsDashboard } from '@/components/analytics/AnalyticsDashboard'
+import { Breadcrumbs, breadcrumbConfigs } from '@/components/layout/Breadcrumbs'
 import { DollarSign, Users, FileText, TrendingUp, Plus, Settings, Clock, CheckCircle, XCircle, ExternalLink, BarChart3 } from 'lucide-react'
 import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
@@ -50,9 +51,16 @@ function CreatorDashboardContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b">
+    <div className="bg-gray-50">
+      {/* Breadcrumbs */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <Breadcrumbs items={breadcrumbConfigs['/dashboard']} />
+        </div>
+      </div>
+
+      {/* Page Header */}
+      <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto mobile-container">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
             <div className="flex items-center space-x-4">
@@ -85,10 +93,10 @@ function CreatorDashboardContent() {
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto mobile-container py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto mobile-container py-6 sm:py-8">
         {showAnalytics && (
           <div className="mb-6 sm:mb-8">
             <AnalyticsDashboard userRole="CREATOR" userId={user.id} />
@@ -343,7 +351,7 @@ function CreatorDashboardContent() {
             </div>
           </CardContent>
         </Card>
-      </main>
+      </div>
     </div>
   )
 }
@@ -681,7 +689,7 @@ function ClipperDashboardContent() {
             </div>
           </CardContent>
         </Card>
-      </main>
+      </div>
     </div>
   )
 }

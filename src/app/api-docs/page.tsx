@@ -2,6 +2,7 @@
 
 import React from 'react';
 import dynamic from 'next/dynamic';
+import { Breadcrumbs, breadcrumbConfigs } from '@/components/layout/Breadcrumbs';
 
 // Dynamically import SwaggerUI to avoid SSR issues
 const SwaggerUI = dynamic(() => import('swagger-ui-react'), {
@@ -14,7 +15,14 @@ import 'swagger-ui-react/swagger-ui.css';
 
 export default function ApiDocsPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-white">
+      {/* Breadcrumbs */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <Breadcrumbs items={breadcrumbConfigs['/api-docs']} />
+        </div>
+      </div>
+
       <div className="bg-gray-50 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
