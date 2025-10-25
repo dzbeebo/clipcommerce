@@ -19,10 +19,6 @@ export default function ClipperDashboard() {
   const { data, loading, error, refetch } = useDashboard()
   const [showAnalytics, setShowAnalytics] = useState(false)
 
-  if (!user) {
-    return <PageLoading message="Verifying access..." />
-  }
-
   if (loading) {
     return <PageLoading message="Loading dashboard..." />
   }
@@ -63,7 +59,7 @@ export default function ClipperDashboard() {
               <h1 className="mobile-heading text-gray-900">Clipper Dashboard</h1>
             </div>
             <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full sm:w-auto">
-              <NotificationCenter userId={user.id} />
+              <NotificationCenter userId={user?.id || ''} />
               <Button 
                 variant="outline" 
                 size="sm"
@@ -92,13 +88,13 @@ export default function ClipperDashboard() {
       <div className="max-w-7xl mx-auto mobile-container py-6 sm:py-8">
         {showAnalytics && (
           <div className="mb-6 sm:mb-8">
-            <AnalyticsDashboard userRole="CLIPPER" userId={user.id} />
+            <AnalyticsDashboard userRole="CLIPPER" userId={user?.id || ''} />
           </div>
         )}
         {/* Welcome Section */}
         <div className="mb-6 sm:mb-8">
           <h2 className="mobile-heading text-gray-900 mb-2">
-            Welcome back, {data?.profile?.displayName || user.email}!
+            Welcome back, {data?.profile?.displayName || user?.email || 'User'}!
           </h2>
           <p className="mobile-text text-gray-600">
             Find creators, submit clips, and start earning money.

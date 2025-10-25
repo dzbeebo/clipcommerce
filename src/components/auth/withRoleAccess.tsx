@@ -26,7 +26,7 @@ export function WithRoleAccess({
   })
 
   if (loading) {
-    return <PageLoading message="Verifying access..." />
+    return <PageLoading message="Loading..." />
   }
 
   if (!hasAccess) {

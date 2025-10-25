@@ -20,10 +20,6 @@ function CreatorDashboardContent() {
   const { data, loading, error, refetch } = useDashboard()
   const [showAnalytics, setShowAnalytics] = useState(false)
 
-  if (!user) {
-    return <div>Loading...</div>
-  }
-
   if (loading) {
     return <PageLoading message="Loading dashboard..." />
   }
@@ -64,7 +60,7 @@ function CreatorDashboardContent() {
               <h1 className="mobile-heading text-gray-900">Creator Dashboard</h1>
             </div>
             <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full sm:w-auto">
-              <NotificationCenter userId={user.id} />
+              <NotificationCenter userId={user?.id || ''} />
               <Button 
                 variant="outline" 
                 size="sm"
@@ -93,13 +89,13 @@ function CreatorDashboardContent() {
       <div className="max-w-7xl mx-auto mobile-container py-6 sm:py-8">
         {showAnalytics && (
           <div className="mb-6 sm:mb-8">
-            <AnalyticsDashboard userRole="CREATOR" userId={user.id} />
+            <AnalyticsDashboard userRole="CREATOR" userId={user?.id || ''} />
           </div>
         )}
         {/* Welcome Section */}
         <div className="mb-6 sm:mb-8">
           <h2 className="mobile-heading text-gray-900 mb-2">
-            Welcome back, {data?.profile?.displayName || user.email}!
+            Welcome back, {data?.profile?.displayName || user?.email || 'User'}!
           </h2>
           <p className="mobile-text text-gray-600">
             Manage your clippers, review submissions, and track your performance.
@@ -355,10 +351,6 @@ function ClipperDashboardContent() {
   const { data, loading, error, refetch } = useDashboard()
   const [showAnalytics, setShowAnalytics] = useState(false)
 
-  if (!user) {
-    return <div>Loading...</div>
-  }
-
   if (loading) {
     return <PageLoading message="Loading dashboard..." />
   }
@@ -399,7 +391,7 @@ function ClipperDashboardContent() {
               <h1 className="mobile-heading text-gray-900">Clipper Dashboard</h1>
             </div>
             <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full sm:w-auto">
-              <NotificationCenter userId={user.id} />
+              <NotificationCenter userId={user?.id || ''} />
               <Button 
                 variant="outline" 
                 size="sm"
@@ -428,14 +420,14 @@ function ClipperDashboardContent() {
       <div className="max-w-7xl mx-auto mobile-container py-6 sm:py-8">
         {showAnalytics && (
           <div className="mb-6 sm:mb-8">
-            <AnalyticsDashboard userRole="CLIPPER" userId={user.id} />
+            <AnalyticsDashboard userRole="CLIPPER" userId={user?.id || ''} />
           </div>
         )}
         
         {/* Welcome Section */}
         <div className="mb-6 sm:mb-8">
           <h2 className="mobile-heading text-gray-900 mb-2">
-            Welcome back, {data?.profile?.displayName || user.email}!
+            Welcome back, {data?.profile?.displayName || user?.email || 'User'}!
           </h2>
           <p className="mobile-text text-gray-600">
             Track your earnings, view submissions, and manage your clipper account.
@@ -700,19 +692,13 @@ function DashboardContent() {
   const { user } = useAuth()
   const [showAnalytics, setShowAnalytics] = useState(false)
 
-  // No need for loading check here since WithRoleAccess already handles it
+  // WithRoleAccess already handles authentication, so we can directly render based on role
   if (user?.role === 'CREATOR') {
     return <CreatorDashboardContent />
   } else if (user?.role === 'CLIPPER') {
     return <ClipperDashboardContent />
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-        <p className="text-gray-600">You don't have permission to access this dashboard.</p>
-      </div>
-    </div>
-  )
+  // This should rarely happen since WithRoleAccess handles auth
+  return null
 }

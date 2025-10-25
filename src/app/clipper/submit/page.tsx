@@ -122,10 +122,6 @@ export default function SubmitClipPage() {
     }
   }
 
-  if (!user) {
-    return <PageLoading message="Verifying access..." />
-  }
-
   if (loading) {
     return <PageLoading message="Loading submission page..." />
   }
