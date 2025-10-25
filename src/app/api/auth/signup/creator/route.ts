@@ -65,19 +65,8 @@ export async function POST(request: NextRequest) {
       }
     })
     
-    // Create session for the user
-    const supabase = await createServerSupabaseClient()
-    const { data: sessionData, error: sessionError } = await supabase.auth.signInWithPassword({
-      email: validatedData.email,
-      password: validatedData.password,
-    })
-    
-    if (sessionError) {
-      throw new Error('Failed to create session')
-    }
-    
-    // Set session cookie
-    const response = NextResponse.json(
+    // Return success response - let the frontend handle sign-in
+    return NextResponse.json(
       { 
         message: 'Creator account created successfully',
         user: {
@@ -88,25 +77,6 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     )
-    
-    // Set the session cookie
-    if (sessionData.session) {
-      response.cookies.set('sb-access-token', sessionData.session.access_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-      })
-      
-      response.cookies.set('sb-refresh-token', sessionData.session.refresh_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-      })
-    }
-    
-    return response
     
   } catch (error) {
     console.error('Creator signup error:', error)
