@@ -11,23 +11,33 @@ const getDatabaseUrl = () => {
     throw new Error('DATABASE_URL is not set')
   }
   
-  // For Supabase, use the pooled connection URL in production
+  // For Supabase in production, add connection pooling parameters
   if (process.env.NODE_ENV === 'production' && url.includes('supabase.co')) {
-    // Replace the direct connection with pooled connection
-    return url.replace(':5432/', ':6543/')
+    // Add connection pooling parameters to prevent prepared statement reuse
+    const urlObj = new URL(url)
+    urlObj.searchParams.set('pgbouncer', 'true')
+    urlObj.searchParams.set('connection_limit', '1')
+    urlObj.searchParams.set('pool_timeout', '0')
+    return urlObj.toString()
   }
   
   return url
 }
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({
-  datasources: {
-    db: {
-      url: getDatabaseUrl(),
+// Create a new Prisma client instance
+const createPrismaClient = () => {
+  return new PrismaClient({
+    datasources: {
+      db: {
+        url: getDatabaseUrl(),
+      },
     },
-  },
-  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-})
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  })
+}
+
+// Use global instance to prevent multiple connections
+export const prisma = globalForPrisma.prisma ?? createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma
