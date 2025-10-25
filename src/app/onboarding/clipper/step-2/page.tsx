@@ -21,7 +21,7 @@ export default function ClipperOnboardingStep2() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          returnUrl: `${window.location.origin}/api/stripe/connect/return?redirect=/onboarding/clipper/step-3`,
+          returnUrl: `${window.location.origin}/stripe-connect-return?redirect=/onboarding/clipper/step-3`,
           refreshUrl: `${window.location.origin}/onboarding/clipper/step-2`,
         }),
       })

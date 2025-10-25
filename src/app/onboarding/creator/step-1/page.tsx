@@ -21,7 +21,7 @@ export default function CreatorOnboardingStep1() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          returnUrl: `${window.location.origin}/api/stripe/connect/return?redirect=/onboarding/creator/step-2`,
+          returnUrl: `${window.location.origin}/stripe-connect-return?redirect=/onboarding/creator/step-2`,
           refreshUrl: `${window.location.origin}/onboarding/creator/step-1`,
         }),
       })

@@ -6,17 +6,12 @@ import { prisma } from '@/lib/prisma'
 export async function GET(request: NextRequest) {
   try {
     const user = await requireAuth()
-    const { searchParams } = new URL(request.url)
-    const accountId = searchParams.get('account_id')
-
-    if (!accountId) {
-      return NextResponse.json({ error: 'Account ID is required' }, { status: 400 })
+    
+    if (!user.stripeAccountId) {
+      return NextResponse.json({ error: 'No Stripe account found for user' }, { status: 400 })
     }
 
-    // Verify the account belongs to the user
-    if (user.stripeAccountId !== accountId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
-    }
+    const accountId = user.stripeAccountId
 
     // Get account details from Stripe
     const account = await stripe.accounts.retrieve(accountId)

@@ -14,15 +14,10 @@ function StripeConnectReturnContent() {
   useEffect(() => {
     const processReturn = async () => {
       try {
-        const accountId = searchParams.get('account_id')
         const redirect = searchParams.get('redirect')
 
-        if (!accountId) {
-          throw new Error('No account ID provided')
-        }
-
-        // Call our API to process the return
-        const response = await fetch(`/api/stripe/connect/return?account_id=${accountId}`)
+        // Call our API to process the return (no account_id needed in URL)
+        const response = await fetch('/api/stripe/connect/return')
         const data = await response.json()
 
         if (!response.ok) {
@@ -35,7 +30,7 @@ function StripeConnectReturnContent() {
           
           // Redirect after a short delay
           setTimeout(() => {
-            router.push(redirect || '/dashboard')
+            router.push(redirect || data.redirectUrl || '/dashboard')
           }, 2000)
         } else {
           setStatus('error')
