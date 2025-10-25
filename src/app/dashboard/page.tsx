@@ -348,10 +348,372 @@ function CreatorDashboardContent() {
   )
 }
 
-export default function CreatorDashboard() {
+function ClipperDashboardContent() {
+  const { user, logout } = useAuth()
+  const { data, loading, error, refetch } = useDashboard()
+  const [showAnalytics, setShowAnalytics] = useState(false)
+
+  if (!user) {
+    return <div>Loading...</div>
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <XCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <p className="text-red-600 mb-4">Error loading dashboard: {error}</p>
+          <Button onClick={refetch}>Try Again</Button>
+        </div>
+      </div>
+    )
+  }
+
+  if (!data) {
+    return <div>No data available</div>
+  }
+
   return (
-    <WithRoleAccess requiredRole="CREATOR" requireOnboarding={true}>
-      <CreatorDashboardContent />
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white border-b">
+        <div className="max-w-7xl mx-auto mobile-container">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
+            <div className="flex items-center space-x-4">
+              <div className="h-8 w-8 rounded-lg bg-green-600 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">C</span>
+              </div>
+              <h1 className="mobile-heading text-gray-900">Clipper Dashboard</h1>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full sm:w-auto">
+              <NotificationCenter userId={user.id} />
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowAnalytics(!showAnalytics)}
+                className="touch-target"
+              >
+                <BarChart3 className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">
+                  {showAnalytics ? 'Hide Analytics' : 'Show Analytics'}
+                </span>
+              </Button>
+              <Button variant="outline" size="sm" className="touch-target">
+                <Settings className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Settings</span>
+              </Button>
+              <Button variant="outline" size="sm" onClick={logout} className="touch-target">
+                <span className="hidden sm:inline">Logout</span>
+                <span className="sm:hidden">Exit</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto mobile-container py-6 sm:py-8">
+        {showAnalytics && (
+          <div className="mb-6 sm:mb-8">
+            <AnalyticsDashboard userRole="CLIPPER" userId={user.id} />
+          </div>
+        )}
+        
+        {/* Welcome Section */}
+        <div className="mb-6 sm:mb-8">
+          <h2 className="mobile-heading text-gray-900 mb-2">
+            Welcome back, {data?.profile?.displayName || user.email}!
+          </h2>
+          <p className="mobile-text text-gray-600">
+            Track your earnings, view submissions, and manage your clipper account.
+          </p>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="mobile-grid mb-6 sm:mb-8">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Earned</CardTitle>
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                ${(data.stats.totalEarned || 0).toFixed(2)}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {data.stats.growthPercentage && data.stats.growthPercentage > 0 ? '+' : ''}
+                {data.stats.growthPercentage?.toFixed(1) || 0}% from last month
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Submissions</CardTitle>
+              <FileText className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{data.stats.activeSubmissions || 0}</div>
+              <p className="text-xs text-muted-foreground">
+                Awaiting review
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Approved Clips</CardTitle>
+              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{data.stats.approvedClips || 0}</div>
+              <p className="text-xs text-muted-foreground">
+                {data.stats.approvalRate?.toFixed(1) || 0}% approval rate
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">This Month</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{data.stats.newSubmissionsThisMonth || 0}</div>
+              <p className="text-xs text-muted-foreground">
+                New submissions
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Actions</CardTitle>
+              <CardDescription>
+                Common tasks to manage your clipper account
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="mobile-form">
+              <Link href="/clipper/submit">
+                <Button className="w-full justify-start touch-target" variant="outline">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Submit New Clip
+                </Button>
+              </Link>
+              <Link href="/dashboard/submissions">
+                <Button className="w-full justify-start touch-target" variant="outline">
+                  <FileText className="h-4 w-4 mr-2" />
+                  View My Submissions
+                </Button>
+              </Link>
+              <Button className="w-full justify-start touch-target" variant="outline">
+                <Settings className="h-4 w-4 mr-2" />
+                Account Settings
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Activity</CardTitle>
+              <CardDescription>
+                Latest updates from your clipper account
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {data.recentActivity && data.recentActivity.length > 0 ? (
+                <div className="space-y-4">
+                  {data.recentActivity.map((activity: any) => (
+                    <div key={activity.id} className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50">
+                      <div className="flex-shrink-0">
+                        {activity.creatorAvatar ? (
+                          <img
+                            src={activity.creatorAvatar}
+                            alt={activity.creatorName}
+                            className="h-8 w-8 rounded-full"
+                          />
+                        ) : (
+                          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                            <span className="text-blue-600 font-bold text-sm">
+                              {activity.creatorName?.charAt(0) || 'C'}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {activity.title}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">
+                          For {activity.creatorName}
+                        </p>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <Badge 
+                            variant={activity.status === 'PENDING' ? 'default' : 
+                                   activity.status === 'APPROVED' ? 'default' : 'destructive'}
+                            className="text-xs"
+                          >
+                            {activity.status}
+                          </Badge>
+                          <span className="text-xs text-gray-400">
+                            {formatDistanceToNow(new Date(activity.submittedAt), { addSuffix: true })}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex-shrink-0">
+                        <span className="text-sm font-medium text-green-600">
+                          ${activity.paymentAmount?.toFixed(2) || '0.00'}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center text-gray-500 py-8">
+                  <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                  <p>No recent activity</p>
+                  <p className="text-sm">Submit your first clip to get started!</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Working With Creators */}
+        {data.creators && data.creators.length > 0 && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>Working With Creators</CardTitle>
+              <CardDescription>
+                Creators you're currently working with
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {data.creators.map((creator: any) => (
+                  <div key={creator.id} className="flex items-center space-x-3 p-4 border rounded-lg">
+                    <div className="flex-shrink-0">
+                      {creator.avatarUrl ? (
+                        <img
+                          src={creator.avatarUrl}
+                          alt={creator.displayName}
+                          className="h-10 w-10 rounded-full"
+                        />
+                      ) : (
+                        <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                          <span className="text-blue-600 font-bold">
+                            {creator.displayName.charAt(0)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {creator.displayName}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        ${creator.rateAmount}/1K views
+                      </p>
+                      <p className="text-xs text-green-600 font-medium">
+                        Joined {formatDistanceToNow(new Date(creator.joinedAt), { addSuffix: true })}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Getting Started */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Getting Started</CardTitle>
+            <CardDescription>
+              Complete these steps to start earning as a clipper
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3">
+                <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
+                  <span className="text-green-600 font-bold text-sm">✓</span>
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">Account Created</p>
+                  <p className="text-sm text-gray-500">Your clipper account is ready</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3">
+                <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
+                  <span className="text-green-600 font-bold text-sm">✓</span>
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">Stripe Connected</p>
+                  <p className="text-sm text-gray-500">Ready to receive payments</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3">
+                <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+                  <span className="text-gray-600 font-bold text-sm">3</span>
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">Submit Your First Clip</p>
+                  <p className="text-sm text-gray-500">Start earning by submitting clips to creators</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </main>
+    </div>
+  )
+}
+
+export default function Dashboard() {
+  return (
+    <WithRoleAccess requireOnboarding={true}>
+      <DashboardContent />
     </WithRoleAccess>
+  )
+}
+
+function DashboardContent() {
+  const { user } = useAuth()
+  const [showAnalytics, setShowAnalytics] = useState(false)
+
+  if (!user) {
+    return <div>Loading...</div>
+  }
+
+  if (user.role === 'CREATOR') {
+    return <CreatorDashboardContent />
+  } else if (user.role === 'CLIPPER') {
+    return <ClipperDashboardContent />
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+        <p className="text-gray-600">You don't have permission to access this dashboard.</p>
+      </div>
+    </div>
   )
 }
