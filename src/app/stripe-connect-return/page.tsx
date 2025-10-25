@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react'
 
-export default function StripeConnectReturn() {
+function StripeConnectReturnContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
@@ -96,5 +96,35 @@ export default function StripeConnectReturn() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function StripeConnectReturn() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center py-12 px-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center">
+              <Loader2 className="h-6 w-6 mr-2 animate-spin text-blue-600" />
+              Stripe Connect
+            </CardTitle>
+            <CardDescription>
+              Processing your Stripe connection...
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <div className="space-y-4">
+              <div className="animate-pulse">
+                <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto mt-2"></div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    }>
+      <StripeConnectReturnContent />
+    </Suspense>
   )
 }
