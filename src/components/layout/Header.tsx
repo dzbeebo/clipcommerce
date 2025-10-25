@@ -154,7 +154,7 @@ export function Header() {
                   </Button>
                   {showNotifications && (
                     <div className="absolute right-0 mt-2 w-80">
-                      <NotificationCenter onClose={() => setShowNotifications(false)} />
+                      <NotificationCenter userId={user?.id || ''} />
                     </div>
                   )}
                 </div>
@@ -163,7 +163,7 @@ export function Header() {
                 <div className="flex items-center space-x-2">
                   <div className="flex items-center space-x-2 text-sm text-gray-700">
                     <User className="h-4 w-4" />
-                    <span>{user?.displayName || user?.email}</span>
+                    <span>{user?.email}</span>
                     <Badge variant="outline" className="text-xs">
                       {userRole}
                     </Badge>
@@ -237,7 +237,7 @@ export function Header() {
                   <div className="border-t border-gray-200 pt-4 mt-4">
                     <div className="flex items-center px-3 py-2 text-sm text-gray-700">
                       <User className="h-4 w-4 mr-2" />
-                      <span>{user?.displayName || user?.email}</span>
+                      <span>{user?.email}</span>
                       <Badge variant="outline" className="ml-2 text-xs">
                         {userRole}
                       </Badge>
