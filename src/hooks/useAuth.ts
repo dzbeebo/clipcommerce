@@ -17,9 +17,28 @@ export function useAuth() {
 
   useEffect(() => {
     checkSession()
+    
+    // Set up periodic session checking every 5 minutes
+    const interval = setInterval(() => {
+      checkSession(true) // Silent check to avoid unnecessary redirects
+    }, 5 * 60 * 1000) // 5 minutes
+
+    // Set up visibility change listener to check session when user returns to tab
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        checkSession(true) // Silent check to avoid unnecessary redirects
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      clearInterval(interval)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
   }, [])
 
-  const checkSession = async () => {
+  const checkSession = async (silent = false) => {
     try {
       const response = await fetch('/api/auth/session')
       const data = await response.json()
@@ -27,11 +46,26 @@ export function useAuth() {
       if (response.ok) {
         setUser(data.user)
       } else {
+        // Session expired or invalid
         setUser(null)
+        if (!silent && user) {
+          // Only redirect if we had a user before (session just expired)
+          console.log('Session expired, redirecting to login')
+          // Show a toast notification if available
+          if (typeof window !== 'undefined' && window.dispatchEvent) {
+            window.dispatchEvent(new CustomEvent('session-expired'))
+          }
+          router.push('/login')
+        }
       }
     } catch (error) {
       console.error('Session check error:', error)
       setUser(null)
+      if (!silent && user) {
+        // Only redirect if we had a user before (network error)
+        console.log('Session check failed, redirecting to login')
+        router.push('/login')
+      }
     } finally {
       setLoading(false)
     }
@@ -102,6 +136,10 @@ export function useAuth() {
     await checkSession()
   }
 
+  const forceSessionCheck = async () => {
+    await checkSession()
+  }
+
   return {
     user,
     loading,
@@ -110,5 +148,6 @@ export function useAuth() {
     signup,
     checkSession,
     refreshUser,
+    forceSessionCheck,
   }
 }

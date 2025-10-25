@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useNotifications } from '@/hooks/useNotifications'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { 
@@ -24,13 +26,40 @@ import { NotificationCenter } from '@/components/NotificationCenter'
 
 export function Header() {
   const { user, logout } = useAuth()
+  const { isAuthenticated, forceSessionCheck } = useAuthContext()
   const { unreadCount } = useNotifications(user?.id)
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
 
-  const isAuthenticated = !!user
   const userRole = user?.role as 'CREATOR' | 'CLIPPER' | undefined
+
+  // Force session check when component mounts to ensure fresh state
+  useEffect(() => {
+    forceSessionCheck()
+  }, [forceSessionCheck])
+
+  // Close mobile menu and notifications when route changes (e.g., due to session expiration redirect)
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+    setShowNotifications(false)
+  }, [pathname])
+
+  // Close mobile menu and notifications when authentication state changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+    setShowNotifications(false)
+  }, [isAuthenticated])
+
+  // Listen for session expired events
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      toast.error('Your session has expired. Please log in again.')
+    }
+
+    window.addEventListener('session-expired', handleSessionExpired)
+    return () => window.removeEventListener('session-expired', handleSessionExpired)
+  }, [])
 
   const navigationItems = isAuthenticated ? [
     {
