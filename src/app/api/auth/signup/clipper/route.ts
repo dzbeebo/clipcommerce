@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     // Validate input
     const validatedData = clipperSignupSchema.parse(body)
     
-    // Check if user already exists
+    // Check if user already exists in our database
     const existingUser = await prisma.user.findUnique({
       where: { email: validatedData.email }
     })
@@ -51,12 +51,36 @@ export async function POST(request: NextRequest) {
     
     if (authError) {
       console.error('Supabase auth user creation failed:', authError)
-      // Rollback database user if Supabase auth fails
-      await prisma.user.delete({ where: { id: user.id } })
-      throw new Error('Failed to create authentication user')
+      
+      // If user already exists in Supabase Auth, try to sign them in instead
+      if (authError.message?.includes('already been registered') || authError.message?.includes('email_exists')) {
+        console.log('User exists in Supabase Auth, attempting to sign in...')
+        
+        // Try to sign in with the existing user
+        const { data: signInData, error: signInError } = await supabaseAdmin.auth.signInWithPassword({
+          email: validatedData.email,
+          password: validatedData.password,
+        })
+        
+        if (signInError) {
+          console.error('Sign in failed:', signInError)
+          // Rollback database user
+          await prisma.user.delete({ where: { id: user.id } })
+          return NextResponse.json(
+            { error: 'Email already exists. Please use a different email or try logging in.' },
+            { status: 400 }
+          )
+        }
+        
+        console.log('✅ Successfully signed in existing Supabase user')
+      } else {
+        // Rollback database user if Supabase auth fails for other reasons
+        await prisma.user.delete({ where: { id: user.id } })
+        throw new Error('Failed to create authentication user')
+      }
+    } else {
+      console.log('✅ Supabase auth user created successfully:', authData.user?.id)
     }
-    
-    console.log('✅ Supabase auth user created successfully:', authData.user?.id)
     
     // Update user with Supabase auth ID
     await prisma.user.update({
