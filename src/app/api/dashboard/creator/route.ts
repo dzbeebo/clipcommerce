@@ -4,15 +4,18 @@ import { requireRole } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
+    console.log('Dashboard API called')
     let user
     try {
       user = await requireRole('CREATOR')
+      console.log('User authenticated:', user.id, user.role)
     } catch (authError) {
       console.error('Authentication error:', authError)
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
     }
 
     // Get creator profile
+    console.log('Looking for creator profile for user:', user.id)
     const creatorProfile = await prisma.creatorProfile.findUnique({
       where: { userId: user.id },
       include: {
@@ -49,8 +52,11 @@ export async function GET(request: NextRequest) {
     })
 
     if (!creatorProfile) {
+      console.log('❌ Creator profile not found for user:', user.id)
       return NextResponse.json({ error: 'Creator profile not found' }, { status: 404 })
     }
+    
+    console.log('✅ Creator profile found:', creatorProfile.id)
 
     // Calculate stats
     const totalPaidOut = await prisma.transaction.aggregate({
