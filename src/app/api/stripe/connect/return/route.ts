@@ -36,7 +36,9 @@ export async function GET(request: NextRequest) {
     // Check if there are any critical requirements that prevent the account from being used
     const hasCriticalIssues = account.requirements?.disabled_reason === 'requirements.past_due' ||
                              account.requirements?.disabled_reason === 'requirements.pending_verification' ||
-                             account.requirements?.disabled_reason === 'requirements.under_review'
+                             account.requirements?.disabled_reason === 'rejected.incomplete_verification' ||
+                             account.requirements?.disabled_reason === 'rejected.fraud' ||
+                             account.requirements?.disabled_reason === 'rejected.other'
 
     if (isSetupComplete && !hasCriticalIssues) {
       // Update user's Stripe connection status
