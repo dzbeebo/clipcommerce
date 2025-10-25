@@ -7,6 +7,7 @@ export interface User {
   email: string
   role: 'CREATOR' | 'CLIPPER' | 'ADMIN'
   onboardingComplete: boolean
+  stripeAccountId?: string
 }
 
 export async function getCurrentUser(): Promise<User | null> {
@@ -34,6 +35,7 @@ export async function getCurrentUser(): Promise<User | null> {
         email: true,
         role: true,
         onboardingComplete: true,
+        stripeAccountId: true,
       }
     })
     

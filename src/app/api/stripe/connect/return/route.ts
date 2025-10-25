@@ -31,8 +31,7 @@ export async function GET(request: NextRequest) {
       await prisma.user.update({
         where: { id: user.id },
         data: { 
-          stripeAccountId: accountId,
-          stripeConnected: true 
+          stripeAccountId: accountId
         }
       })
 
