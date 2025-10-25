@@ -98,6 +98,10 @@ export function useAuth() {
     }
   }
 
+  const refreshUser = async () => {
+    await checkSession()
+  }
+
   return {
     user,
     loading,
@@ -105,5 +109,6 @@ export function useAuth() {
     logout,
     signup,
     checkSession,
+    refreshUser,
   }
 }

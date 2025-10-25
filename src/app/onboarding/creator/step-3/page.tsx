@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -59,16 +60,33 @@ export default function CreatorOnboardingStep3() {
   const [selectedPlan, setSelectedPlan] = useState('pro')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const { refreshUser } = useAuth()
 
   const handleSubscribe = async () => {
     setIsLoading(true)
     try {
-      // TODO: Implement Stripe subscription
-      toast.success('Subscription created successfully!')
+      // Complete onboarding
+      const response = await fetch('/api/onboarding/complete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to complete onboarding')
+      }
+
+      // Refresh user data to update onboarding status
+      await refreshUser()
+      
+      toast.success('Onboarding completed successfully!')
       router.push('/dashboard')
     } catch (error) {
-      console.error('Subscription error:', error)
-      toast.error('Failed to create subscription')
+      console.error('Onboarding completion error:', error)
+      toast.error('Failed to complete onboarding')
     } finally {
       setIsLoading(false)
     }
