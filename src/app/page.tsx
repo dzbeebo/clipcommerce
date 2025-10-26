@@ -1,223 +1,157 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, Users, DollarSign, Shield, Zap, BarChart3, CheckCircle } from 'lucide-react'
+import { ArrowRight, Upload, Scissors, CheckCircle, DollarSign, Users, Wallet, BarChart3, Play } from 'lucide-react'
 
 export default function HomePage() {
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-white">
-
+    <div className="bg-background-light font-display text-text-primary">
       {/* Hero Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 text-center">
-          <Badge variant="secondary" className="mb-4">
-            🚀 Now in Beta
+      <section className="py-20 md:py-32">
+        <div className="container mx-auto px-6 text-center">
+          <Badge className="bg-secondary/20 text-secondary text-sm font-bold py-1 px-3 rounded-full mb-4">
+            Now in Public Beta!
           </Badge>
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            Connect Creators with{' '}
-            <span className="text-blue-600">Clippers</span>
+          <h1 className="text-4xl md:text-6xl font-black text-text-primary leading-tight tracking-tighter mb-6">
+            Turn Your Best Moments into<br className="hidden md:block"/> Viral <span className="text-primary">Clips</span> and <span className="text-secondary">Cash</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            A two-sided marketplace that automates clip submission, verification, 
-            approval, and payment processing between content creators and clippers.
+          <p className="max-w-3xl mx-auto text-text-secondary text-lg md:text-xl mb-10">
+            ClipMarket connects content creators with talented clippers to produce shareable, viral-ready video clips. More views, more engagement, more earnings.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center gap-4">
             <Link href="/signup">
-              <Button size="lg" className="text-lg px-8 py-6">
-                Get Started Free
-                <ArrowRight className="ml-2 h-5 w-5" />
+              <Button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] gap-2 transform hover:scale-105 transition-transform">
+                <ArrowRight className="text-xl" />
+                <span>Get Started for Free</span>
               </Button>
             </Link>
             <Link href="/how-it-works">
-              <Button variant="outline" size="lg" className="text-lg px-8 py-6">
-                Learn How It Works
+              <Button variant="outline" className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-white text-text-primary text-base font-bold leading-normal tracking-[0.015em] gap-2 border border-gray-200 hover:bg-gray-100 transition-colors">
+                <Play className="text-xl" />
+                <span>Watch Demo</span>
               </Button>
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Everything you need to scale your content
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Whether you're a creator looking to expand your reach or a clipper 
-              wanting to monetize your skills, we've got you covered.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card>
-              <CardHeader>
-                <div className="h-12 w-12 rounded-lg bg-blue-100 flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-blue-600" />
-                </div>
-                <CardTitle>Automated Workflow</CardTitle>
-                <CardDescription>
-                  Streamline the entire process from clip submission to payment
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    One-click clip submission
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    Automatic verification
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    Instant payments
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <div className="h-12 w-12 rounded-lg bg-green-100 flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-green-600" />
-                </div>
-                <CardTitle>Fraud Prevention</CardTitle>
-                <CardDescription>
-                  YouTube OAuth verification ensures clippers own their content
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    Channel ownership verification
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    Secure payment processing
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    Dispute resolution system
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <div className="h-12 w-12 rounded-lg bg-purple-100 flex items-center justify-center mb-4">
-                  <BarChart3 className="h-6 w-6 text-purple-600" />
-                </div>
-                <CardTitle>Analytics & Insights</CardTitle>
-                <CardDescription>
-                  Track performance and optimize your content strategy
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    Real-time performance metrics
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    ROI tracking
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    Clipper leaderboards
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+          <div className="mt-16 relative">
+            <div className="absolute -top-8 -left-8 w-32 h-32 bg-primary/20 rounded-full blur-2xl"></div>
+            <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-secondary/20 rounded-full blur-2xl"></div>
+            <img 
+              alt="Dashboard preview" 
+              className="rounded-2xl shadow-2xl mx-auto border-4 border-white relative z-10" 
+              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=400&fit=crop&crop=center"
+            />
           </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              How It Works
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Simple, secure, and automated. Get started in minutes.
-            </p>
+      <section className="py-20 bg-white" id="how-it-works">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-black text-text-primary mb-3">How It Works</h2>
+            <p className="text-text-secondary text-lg max-w-2xl mx-auto">Getting started is simple. Four easy steps to amplify your content's reach.</p>
           </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="flex flex-col items-center text-center p-6">
+              <div className="flex items-center justify-center size-16 rounded-2xl bg-primary/10 text-primary mb-4">
+                <Upload className="text-3xl" />
+              </div>
+              <h3 className="text-xl font-bold text-text-primary mb-2">1. Upload Video</h3>
+              <p className="text-text-secondary">Creators upload their long-form video content and set their clipping requirements.</p>
+            </div>
+            <div className="flex flex-col items-center text-center p-6">
+              <div className="flex items-center justify-center size-16 rounded-2xl bg-secondary/10 text-secondary mb-4">
+                <Scissors className="text-3xl" />
+              </div>
+              <h3 className="text-xl font-bold text-text-primary mb-2">2. Clippers Work</h3>
+              <p className="text-text-secondary">Skilled clippers find your project and start creating amazing, shareable clips.</p>
+            </div>
+            <div className="flex flex-col items-center text-center p-6">
+              <div className="flex items-center justify-center size-16 rounded-2xl bg-primary/10 text-primary mb-4">
+                <CheckCircle className="text-3xl" />
+              </div>
+              <h3 className="text-xl font-bold text-text-primary mb-2">3. Review & Approve</h3>
+              <p className="text-text-secondary">You review the clips, provide feedback, and approve your favorites for publishing.</p>
+            </div>
+            <div className="flex flex-col items-center text-center p-6">
+              <div className="flex items-center justify-center size-16 rounded-2xl bg-secondary/10 text-secondary mb-4">
+                <DollarSign className="text-3xl" />
+              </div>
+              <h3 className="text-xl font-bold text-text-primary mb-2">4. Share & Earn</h3>
+              <p className="text-text-secondary">Share the clips, watch your views skyrocket, and pay clippers through our secure platform.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                For Creators
-              </h3>
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
-                    1
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Set Your Rates</h4>
-                    <p className="text-gray-600">Define how much you pay per 1,000 views</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-4">
-                  <div className="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
-                    2
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Review & Approve</h4>
-                    <p className="text-gray-600">Clippers submit clips, you review and approve</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-4">
-                  <div className="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
-                    3
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Automatic Payments</h4>
-                    <p className="text-gray-600">Payments are processed instantly upon approval</p>
-                  </div>
+      {/* Features Section */}
+      <section className="py-20" id="features">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-black text-text-primary mb-3">Powerful Features for Growth</h2>
+            <p className="text-text-secondary text-lg max-w-2xl mx-auto">Everything you need to scale your content creation and clipping business.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+              <div className="flex items-center justify-center size-12 rounded-xl bg-primary/10 text-primary mb-4">
+                <Users className="text-2xl" />
+              </div>
+              <h3 className="text-xl font-bold text-text-primary mb-2">Creator & Clipper Marketplace</h3>
+              <p className="text-text-secondary">A dedicated space for creators to find talented clippers and for clippers to find exciting new projects.</p>
+            </div>
+            <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+              <div className="flex items-center justify-center size-12 rounded-xl bg-secondary/10 text-secondary mb-4">
+                <Wallet className="text-2xl" />
+              </div>
+              <h3 className="text-xl font-bold text-text-primary mb-2">Secure & Easy Payments</h3>
+              <p className="text-text-secondary">Integrated payment system ensures clippers get paid on time and creators can manage budgets easily.</p>
+            </div>
+            <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+              <div className="flex items-center justify-center size-12 rounded-xl bg-primary/10 text-primary mb-4">
+                <BarChart3 className="text-2xl" />
+              </div>
+              <h3 className="text-xl font-bold text-text-primary mb-2">Performance Analytics</h3>
+              <p className="text-text-secondary">Track clip views, engagement, and earnings with our intuitive and powerful analytics dashboard.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 bg-primary/5" id="testimonials">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-black text-text-primary mb-3">Loved by Creators and Clippers</h2>
+            <p className="text-text-secondary text-lg max-w-2xl mx-auto">Don't just take our word for it. Here's what our users are saying.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-2xl shadow-lg transform hover:-translate-y-2 transition-transform">
+              <p className="text-text-secondary mb-6">"ClipMarket has been a game-changer for my channel. I can focus on creating content while the clippers handle making it shareable. My engagement has doubled!"</p>
+              <div className="flex items-center gap-4">
+                <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 bg-gradient-to-br from-blue-400 to-purple-500"></div>
+                <div>
+                  <h4 className="font-bold text-text-primary">GamerPro</h4>
+                  <p className="text-sm text-primary font-medium">Content Creator</p>
                 </div>
               </div>
             </div>
-
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                For Clippers
-              </h3>
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center text-sm font-bold">
-                    1
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Connect YouTube</h4>
-                    <p className="text-gray-600">Verify ownership of your channel</p>
-                  </div>
+            <div className="bg-white p-8 rounded-2xl shadow-lg transform hover:-translate-y-2 transition-transform">
+              <p className="text-text-secondary mb-6">"As a clipper, finding consistent work was tough. ClipMarket's marketplace is amazing. I have a steady stream of projects and get paid securely. Highly recommend."</p>
+              <div className="flex items-center gap-4">
+                <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 bg-gradient-to-br from-green-400 to-blue-500"></div>
+                <div>
+                  <h4 className="font-bold text-text-primary">ClipMasterJane</h4>
+                  <p className="text-sm text-secondary font-medium">Pro Clipper</p>
                 </div>
-                <div className="flex items-start space-x-4">
-                  <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center text-sm font-bold">
-                    2
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Submit Clips</h4>
-                    <p className="text-gray-600">Upload your best clips for review</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-4">
-                  <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center text-sm font-bold">
-                    3
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">Get Paid</h4>
-                    <p className="text-gray-600">Receive payments automatically when approved</p>
-                  </div>
+              </div>
+            </div>
+            <div className="bg-white p-8 rounded-2xl shadow-lg transform hover:-translate-y-2 transition-transform">
+              <p className="text-text-secondary mb-6">"The analytics are so insightful! I can see which clips perform best and which clippers deliver the most views. It's essential for optimizing my content strategy."</p>
+              <div className="flex items-center gap-4">
+                <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 bg-gradient-to-br from-purple-400 to-pink-500"></div>
+                <div>
+                  <h4 className="font-bold text-text-primary">TechTalks</h4>
+                  <p className="text-sm text-primary font-medium">Content Creator</p>
                 </div>
               </div>
             </div>
@@ -226,30 +160,22 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-blue-600">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to get started?
-          </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join the platform that's revolutionizing content creation and clipper monetization.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      <section className="py-20">
+        <div className="container mx-auto px-6">
+          <div className="bg-primary rounded-2xl p-10 md:p-16 text-center relative overflow-hidden">
+            <div className="absolute -bottom-16 -left-16 size-48 bg-white/10 rounded-full"></div>
+            <div className="absolute -top-16 -right-16 size-48 bg-white/10 rounded-full"></div>
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-4 relative z-10">Ready to Amplify Your Content?</h2>
+            <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8 relative z-10">Join ClipMarket today and start turning your videos into viral masterpieces. It's free to get started!</p>
             <Link href="/signup">
-              <Button size="lg" variant="secondary" className="text-lg px-8 py-6">
-                Create Account
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link href="/creators">
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-white text-white hover:bg-white hover:text-blue-600">
-                Browse Creators
+              <Button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-white text-primary text-base font-bold leading-normal tracking-[0.015em] gap-2 mx-auto relative z-10 transform hover:scale-105 transition-transform">
+                <span>Sign Up Now</span>
+                <ArrowRight className="text-xl" />
               </Button>
             </Link>
           </div>
         </div>
       </section>
-
     </div>
   )
 }

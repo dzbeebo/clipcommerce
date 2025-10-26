@@ -93,14 +93,19 @@ export function Header() {
 
   const publicNavigationItems = [
     {
-      name: 'How It Works',
-      href: '/how-it-works',
-      current: pathname === '/how-it-works'
+      name: 'Features',
+      href: '#features',
+      current: pathname === '#features'
     },
     {
-      name: 'API Docs',
-      href: '/api-docs',
-      current: pathname === '/api-docs'
+      name: 'How It Works',
+      href: '#how-it-works',
+      current: pathname === '#how-it-works'
+    },
+    {
+      name: 'Testimonials',
+      href: '#testimonials',
+      current: pathname === '#testimonials'
     }
   ]
 
@@ -111,10 +116,12 @@ export function Header() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href={isAuthenticated ? (userRole === 'CREATOR' ? '/dashboard' : '/clipper') : '/'} className="flex items-center">
-              <div className="h-8 w-8 bg-green-600 rounded-lg flex items-center justify-center">
-                <Video className="h-5 w-5 text-white" />
+              <div className="h-8 w-8 text-primary">
+                <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                  <path clipRule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor" fillRule="evenodd"></path>
+                </svg>
               </div>
-              <span className="ml-2 text-xl font-bold text-gray-900">ClipCommerce</span>
+              <span className="ml-2 text-xl font-bold text-text-primary">ClipMarket</span>
             </Link>
           </div>
 
@@ -130,8 +137,8 @@ export function Header() {
                       href={item.href}
                       className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                         item.current
-                          ? 'bg-green-100 text-green-700'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                          ? 'bg-primary text-white'
+                          : 'text-text-secondary hover:text-primary hover:bg-primary/10'
                       }`}
                     >
                       <Icon className="h-4 w-4 mr-2" />
@@ -148,8 +155,8 @@ export function Header() {
                     href={item.href}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                       item.current
-                        ? 'bg-green-100 text-green-700'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                        ? 'bg-primary text-white'
+                        : 'text-text-secondary hover:text-primary hover:bg-primary/10'
                     }`}
                   >
                     {item.name}
@@ -210,13 +217,13 @@ export function Header() {
             ) : (
               <div className="flex items-center space-x-4">
                 <Link href="/login">
-                  <Button variant="ghost" size="sm">
-                    Sign In
+                  <Button variant="ghost" size="sm" className="text-text-primary hover:text-primary">
+                    Log In
                   </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button size="sm">
-                    Get Started
+                  <Button size="sm" className="bg-primary text-white hover:opacity-90">
+                    Sign Up
                   </Button>
                 </Link>
               </div>
