@@ -64,22 +64,22 @@ export function Header() {
   const navigationItems = isAuthenticated ? [
     {
       name: 'Dashboard',
-      href: userRole === 'CREATOR' ? '/dashboard' : '/clipper',
+      href: userRole === 'CREATOR' ? '/creator' : '/clipper',
       icon: Home,
-      current: pathname === '/dashboard' || pathname === '/clipper'
+      current: pathname === '/creator' || pathname === '/clipper'
     },
     ...(userRole === 'CREATOR' ? [
       {
         name: 'Submissions',
-        href: '/dashboard/submissions',
+        href: '/creator/submissions',
         icon: FileText,
-        current: pathname === '/dashboard/submissions'
+        current: pathname === '/creator/submissions'
       },
       {
         name: 'Analytics',
-        href: '/dashboard/analytics',
+        href: '/creator/analytics',
         icon: BarChart3,
-        current: pathname.startsWith('/dashboard/analytics')
+        current: pathname.startsWith('/creator/analytics')
       }
     ] : [
       {
@@ -115,7 +115,7 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href={isAuthenticated ? (userRole === 'CREATOR' ? '/dashboard' : '/clipper') : '/'} className="flex items-center">
+            <Link href={isAuthenticated ? (userRole === 'CREATOR' ? '/creator' : '/clipper') : '/'} className="flex items-center">
               <div className="h-8 w-8 text-primary">
                 <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                   <path clipRule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor" fillRule="evenodd"></path>

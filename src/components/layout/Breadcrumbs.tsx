@@ -90,19 +90,34 @@ export const breadcrumbConfigs = {
     { label: 'Clipper Dashboard', href: '/clipper' },
     { label: 'Submit Clips', href: '/clipper/submit' }
   ],
+  '/creator': [
+    { label: 'Home', href: '/' },
+    { label: 'Creator Dashboard', href: '/creator' }
+  ],
+  '/creator/submissions': [
+    { label: 'Home', href: '/' },
+    { label: 'Creator Dashboard', href: '/creator' },
+    { label: 'Submissions', href: '/creator/submissions' }
+  ],
+  '/creator/analytics': [
+    { label: 'Home', href: '/' },
+    { label: 'Creator Dashboard', href: '/creator' },
+    { label: 'Analytics', href: '/creator/analytics' }
+  ],
+  // Legacy dashboard URLs for backward compatibility
   '/dashboard': [
     { label: 'Home', href: '/' },
-    { label: 'Creator Dashboard', href: '/dashboard' }
+    { label: 'Creator Dashboard', href: '/creator' }
   ],
   '/dashboard/submissions': [
     { label: 'Home', href: '/' },
-    { label: 'Creator Dashboard', href: '/dashboard' },
-    { label: 'Submissions', href: '/dashboard/submissions' }
+    { label: 'Creator Dashboard', href: '/creator' },
+    { label: 'Submissions', href: '/creator/submissions' }
   ],
   '/dashboard/analytics': [
     { label: 'Home', href: '/' },
-    { label: 'Creator Dashboard', href: '/dashboard' },
-    { label: 'Analytics', href: '/dashboard/analytics' }
+    { label: 'Creator Dashboard', href: '/creator' },
+    { label: 'Analytics', href: '/creator/analytics' }
   ],
   '/onboarding/clipper/step-1': [
     { label: 'Home', href: '/' },

@@ -13,7 +13,9 @@ import {
   LogOut,
   Upload,
   Bell,
-  HelpCircle
+  HelpCircle,
+  FileText,
+  BarChart3
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -32,28 +34,40 @@ export function Sidebar({ children }: SidebarProps) {
   const navigationItems = [
     {
       name: 'Dashboard',
-      href: userRole === 'CREATOR' ? '/dashboard' : '/clipper',
+      href: userRole === 'CREATOR' ? '/creator' : '/clipper',
       icon: LayoutDashboard,
-      current: pathname === '/dashboard' || pathname === '/clipper'
+      current: pathname === '/creator' || pathname === '/clipper'
     },
     ...(userRole === 'CREATOR' ? [
       {
+        name: 'Submissions',
+        href: '/creator/submissions',
+        icon: FileText,
+        current: pathname === '/creator/submissions'
+      },
+      {
+        name: 'Analytics',
+        href: '/creator/analytics',
+        icon: BarChart3,
+        current: pathname.startsWith('/creator/analytics')
+      },
+      {
         name: 'My Videos',
-        href: '/dashboard/videos',
+        href: '/creator/videos',
         icon: Video,
-        current: pathname === '/dashboard/videos'
+        current: pathname === '/creator/videos'
       },
       {
         name: 'Payments',
-        href: '/dashboard/payments',
+        href: '/creator/payments',
         icon: DollarSign,
-        current: pathname === '/dashboard/payments'
+        current: pathname === '/creator/payments'
       },
       {
         name: 'Clippers Hub',
-        href: '/dashboard/clippers',
+        href: '/creator/clippers',
         icon: Users,
-        current: pathname === '/dashboard/clippers'
+        current: pathname === '/creator/clippers'
       }
     ] : [
       {
@@ -83,7 +97,7 @@ export function Sidebar({ children }: SidebarProps) {
       <div className={`${isCollapsed ? 'w-16' : 'w-64'} bg-white border-r border-gray-200 flex flex-col transition-all duration-300`}>
         {/* Logo */}
         <div className="p-6 border-b border-gray-200">
-          <Link href={userRole === 'CREATOR' ? '/dashboard' : '/clipper'} className="flex items-center">
+          <Link href={userRole === 'CREATOR' ? '/creator' : '/clipper'} className="flex items-center">
             <div className="h-8 w-8 text-primary">
               <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                 <path clipRule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor" fillRule="evenodd"></path>

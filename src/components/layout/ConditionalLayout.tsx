@@ -15,7 +15,8 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
 
   // Routes that should use the sidebar layout
   const sidebarRoutes = [
-    '/dashboard',
+    '/creator',
+    '/dashboard', // Legacy support
     '/profile',
     '/settings',
     '/clipper'

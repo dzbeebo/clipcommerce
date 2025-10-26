@@ -27,7 +27,7 @@ function ForbiddenContent() {
         title: 'Clipper Dashboard Access Denied',
         description: 'This is the Clipper dashboard. You\'re currently logged in as a Creator.',
         actionText: 'Go to Creator Dashboard',
-        actionUrl: '/dashboard'
+        actionUrl: '/creator'
       }
     }
     
@@ -36,7 +36,7 @@ function ForbiddenContent() {
         title: 'Admin Panel Access Denied',
         description: 'This is the Admin panel. You don\'t have admin privileges.',
         actionText: 'Go to Your Dashboard',
-        actionUrl: '/dashboard'
+        actionUrl: '/creator'
       }
     }
 
