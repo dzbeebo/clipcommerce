@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
+import { useDashboard } from '@/hooks/useDashboard'
 import { WithRoleAccess } from '@/components/auth/withRoleAccess'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -32,6 +33,9 @@ import { formatDistanceToNow } from 'date-fns'
 function ProfileContent() {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('clipper')
+  
+  // Use the dashboard hook to get profile data
+  const { data: dashboardData } = useDashboard()
 
   const navigationItems = [
     {
@@ -101,14 +105,28 @@ function ProfileContent() {
                   </div>
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-text-primary">Chris Smith</h2>
-                  <p className="text-text-secondary mb-3">@chrissmithcreates</p>
+                  <h2 className="text-2xl font-bold text-text-primary">
+                    {dashboardData?.profile?.displayName || user?.email || 'User'}
+                  </h2>
+                  <p className="text-text-secondary mb-3">
+                    {(dashboardData?.profile as any)?.youtubeChannelName || '@username'}
+                  </p>
                   <div className="flex space-x-2 mb-3">
-                    <Badge className="bg-primary text-white">Content Creator</Badge>
-                    <Badge className="bg-secondary/20 text-secondary">Clipper</Badge>
+                    <Badge className="bg-primary text-white">
+                      {user?.role === 'CREATOR' ? 'Content Creator' : 'Clipper'}
+                    </Badge>
+                    {user?.role === 'CREATOR' && (
+                      <Badge className="bg-secondary/20 text-secondary">
+                        {(dashboardData?.profile as any)?.subscriptionTier || 'Basic'}
+                      </Badge>
+                    )}
                   </div>
                   <p className="text-text-secondary max-w-md">
-                    Award-winning content creator focused on tech and gaming. Let's create amazing clips together! 🚀 Let's connect and make magic happen.
+                    {(dashboardData?.profile as any)?.description || 
+                      (user?.role === 'CREATOR' 
+                        ? 'Content creator focused on creating amazing clips. Let\'s work together!' 
+                        : 'Professional clipper creating viral-ready content. Ready to help amplify your videos!'
+                      )}
                   </p>
                 </div>
               </div>
@@ -154,62 +172,43 @@ function ProfileContent() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      <div className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50">
-                        <img 
-                          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" 
-                          alt="Clip thumbnail" 
-                          className="w-12 h-12 rounded-lg object-cover"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-text-primary">Keynote Speech Highlight</p>
-                          <p className="text-xs text-text-secondary">SaaS Growth Co.</p>
+                      {dashboardData?.recentActivity && dashboardData.recentActivity.length > 0 ? (
+                        dashboardData.recentActivity.slice(0, 3).map((activity) => (
+                          <div key={activity.id} className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50">
+                            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                              <FileText className="h-6 w-6 text-primary" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-text-primary">{activity.title}</p>
+                              <p className="text-xs text-text-secondary">
+                                {activity.creatorName || activity.clipperName || 'Unknown'}
+                              </p>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Badge className={`text-xs flex items-center ${
+                                activity.status === 'APPROVED' ? 'bg-green-100 text-green-800' :
+                                activity.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                                activity.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
+                                'bg-blue-100 text-blue-800'
+                              }`}>
+                                {activity.status === 'APPROVED' && <CheckCircle className="h-3 w-3 mr-1" />}
+                                {activity.status === 'PENDING' && <Clock className="h-3 w-3 mr-1" />}
+                                {activity.status === 'REJECTED' && <XCircle className="h-3 w-3 mr-1" />}
+                                {activity.status}
+                              </Badge>
+                              <span className="text-xs text-text-secondary">
+                                {formatDistanceToNow(new Date(activity.submittedAt), { addSuffix: true })}
+                              </span>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-center py-8 text-text-secondary">
+                          <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                          <p>No submissions yet</p>
+                          <p className="text-sm">Your clips will appear here</p>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge className="bg-green-100 text-green-800 text-xs flex items-center">
-                            <CheckCircle className="h-3 w-3 mr-1" />
-                            Approved
-                          </Badge>
-                          <span className="text-xs text-text-secondary">Jun 21, 2023</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50">
-                        <img 
-                          src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=60&h=60&fit=crop&crop=center" 
-                          alt="Clip thumbnail" 
-                          className="w-12 h-12 rounded-lg object-cover"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-text-primary">Epic Gaming Moment #3</p>
-                          <p className="text-xs text-text-secondary">Gamer Pro</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge className="bg-yellow-100 text-yellow-800 text-xs flex items-center">
-                            <Clock className="h-3 w-3 mr-1" />
-                            Pending
-                          </Badge>
-                          <span className="text-xs text-text-secondary">Jun 18, 2023</span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50">
-                        <img 
-                          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=60&h=60&fit=crop&crop=center" 
-                          alt="Clip thumbnail" 
-                          className="w-12 h-12 rounded-lg object-cover"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-text-primary">React Hooks Tutorial Clip</p>
-                          <p className="text-xs text-text-secondary">CodeWizard</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge className="bg-red-100 text-red-800 text-xs flex items-center">
-                            <XCircle className="h-3 w-3 mr-1" />
-                            Rejected
-                          </Badge>
-                          <span className="text-xs text-text-secondary">Jun 15, 2023</span>
-                        </div>
-                      </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -256,27 +255,35 @@ function ProfileContent() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                          <CheckCircle className="h-4 w-4 text-green-600" />
+                      {dashboardData?.recentActivity && dashboardData.recentActivity.length > 0 ? (
+                        dashboardData.recentActivity
+                          .filter(activity => activity.status === 'APPROVED' && activity.paymentAmount)
+                          .slice(0, 2)
+                          .map((activity) => (
+                            <div key={activity.id} className="flex items-center space-x-3">
+                              <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
+                                <CheckCircle className="h-4 w-4 text-green-600" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-text-primary">
+                                  From {activity.creatorName || activity.clipperName || 'Unknown'}
+                                </p>
+                                <p className="text-xs text-text-secondary">
+                                  {formatDistanceToNow(new Date(activity.submittedAt), { addSuffix: true })}
+                                </p>
+                              </div>
+                              <span className="text-sm font-medium text-green-600">
+                                +${activity.paymentAmount?.toFixed(2) || '0.00'}
+                              </span>
+                            </div>
+                          ))
+                      ) : (
+                        <div className="text-center py-8 text-text-secondary">
+                          <DollarSign className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                          <p>No payments yet</p>
+                          <p className="text-sm">Approved clips will show payments here</p>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-text-primary">From SaaS Growth Co.</p>
-                          <p className="text-xs text-text-secondary">June 22, 2023</p>
-                        </div>
-                        <span className="text-sm font-medium text-green-600">+$150.00</span>
-                      </div>
-
-                      <div className="flex items-center space-x-3">
-                        <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                          <CheckCircle className="h-4 w-4 text-green-600" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-text-primary">From Gamer Pro</p>
-                          <p className="text-xs text-text-secondary">June 12, 2023</p>
-                        </div>
-                        <span className="text-sm font-medium text-green-600">+$75.50</span>
-                      </div>
+                      )}
                     </div>
                     <Link href="/clipper/payments" className="text-primary text-sm font-medium hover:underline mt-4 block">
                       View all payments

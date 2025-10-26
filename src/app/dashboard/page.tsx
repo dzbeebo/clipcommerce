@@ -70,7 +70,7 @@ function CreatorDashboardContent() {
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-text-primary mb-2">
-            Welcome back, Chris!
+            Welcome back, {data?.profile?.displayName || user?.email || 'User'}!
           </h2>
           <p className="text-text-secondary text-lg">
             Here's what's happening.
@@ -85,10 +85,13 @@ function CreatorDashboardContent() {
               <DollarSign className="h-4 w-4 text-text-secondary" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-text-primary">$12,850</div>
+              <div className="text-3xl font-bold text-text-primary">
+                ${(data.stats.totalPaidOut || 0).toLocaleString()}
+              </div>
               <p className="text-xs text-green-600 flex items-center mt-1">
                 <ArrowUpRight className="h-3 w-3 mr-1" />
-                $1,200 this month
+                {data.stats.growthPercentage && data.stats.growthPercentage > 0 ? '+' : ''}
+                {data.stats.growthPercentage?.toFixed(1) || 0}% this month
               </p>
             </CardContent>
           </Card>
@@ -99,8 +102,10 @@ function CreatorDashboardContent() {
               <FileText className="h-4 w-4 text-text-secondary" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-text-primary">8</div>
-              <p className="text-xs text-text-secondary mt-1">2 new this week</p>
+              <div className="text-3xl font-bold text-text-primary">{data.stats.pendingSubmissions || 0}</div>
+              <p className="text-xs text-text-secondary mt-1">
+                {data.stats.newClippersThisMonth || 0} new clippers this month
+              </p>
             </CardContent>
           </Card>
 
@@ -110,10 +115,11 @@ function CreatorDashboardContent() {
               <TrendingUp className="h-4 w-4 text-text-secondary" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-text-primary">1.2M</div>
-              <p className="text-xs text-green-600 flex items-center mt-1">
-                <ArrowUpRight className="h-3 w-3 mr-1" />
-                10.1%
+              <div className="text-3xl font-bold text-text-primary">
+                {data.stats.totalViews ? (data.stats.totalViews / 1000).toFixed(1) + 'K' : '0'}
+              </div>
+              <p className="text-xs text-text-secondary mt-1">
+                {data.stats.approvedSubmissions || 0} approved clips
               </p>
             </CardContent>
           </Card>
@@ -124,8 +130,10 @@ function CreatorDashboardContent() {
               <Users className="h-4 w-4 text-text-secondary" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-text-primary">ClipperPro</div>
-              <p className="text-xs text-secondary mt-1">320k Views</p>
+              <div className="text-3xl font-bold text-text-primary">{data.stats.activeClippers || 0}</div>
+              <p className="text-xs text-text-secondary mt-1">
+                {data.clippers && data.clippers.length > 0 ? data.clippers[0].displayName : 'No clippers yet'}
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -142,68 +150,45 @@ function CreatorDashboardContent() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50">
-                  <img 
-                    src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=60&h=60&fit=crop&crop=center" 
-                    alt="Video thumbnail" 
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-text-primary truncate">
-                      My Latest Gaming Stream Highlights
-                    </p>
-                    <div className="flex items-center space-x-2 mt-1">
-                      <Badge className="bg-yellow-100 text-yellow-800 text-xs">In Progress</Badge>
-                      <span className="text-xs text-text-secondary">5 / 10</span>
+                {data.recentActivity && data.recentActivity.length > 0 ? (
+                  data.recentActivity.slice(0, 3).map((activity) => (
+                    <div key={activity.id} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50">
+                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                        <FileText className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-text-primary truncate">
+                          {activity.title}
+                        </p>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <Badge className={`text-xs ${
+                            activity.status === 'APPROVED' ? 'bg-green-100 text-green-800' :
+                            activity.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                            activity.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
+                            'bg-blue-100 text-blue-800'
+                          }`}>
+                            {activity.status}
+                          </Badge>
+                          <span className="text-xs text-text-secondary">
+                            by {activity.clipperName || activity.creatorName}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-medium text-text-primary">
+                          {activity.views ? (activity.views / 1000).toFixed(1) + 'k' : '0'}
+                        </p>
+                        <p className="text-xs text-text-secondary">views</p>
+                      </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-text-secondary">
+                    <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                    <p>No recent activity yet</p>
+                    <p className="text-sm">Start by uploading your first video!</p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-text-primary">25.6k</p>
-                    <p className="text-xs text-text-secondary">Views</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50">
-                  <img 
-                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=60&h=60&fit=crop&crop=center" 
-                    alt="Video thumbnail" 
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-text-primary truncate">
-                      How to Grow Your SaaS Business
-                    </p>
-                    <div className="flex items-center space-x-2 mt-1">
-                      <Badge className="bg-green-100 text-green-800 text-xs">Completed</Badge>
-                      <span className="text-xs text-text-secondary">8 / 8</span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-text-primary">120.1k</p>
-                    <p className="text-xs text-text-secondary">Views</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50">
-                  <img 
-                    src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=60&h=60&fit=crop&crop=center" 
-                    alt="Video thumbnail" 
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-text-primary truncate">
-                      Building a React App from Scratch
-                    </p>
-                    <div className="flex items-center space-x-2 mt-1">
-                      <Badge className="bg-blue-100 text-blue-800 text-xs">Seeking Clippers</Badge>
-                      <span className="text-xs text-text-secondary">0 / 5</span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-text-primary">-</p>
-                    <p className="text-xs text-text-secondary">Views</p>
-                  </div>
-                </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -221,33 +206,46 @@ function CreatorDashboardContent() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-text-secondary">Pending</p>
-                    <p className="text-2xl font-bold text-text-primary">$450.75</p>
+                    <p className="text-2xl font-bold text-text-primary">
+                      ${data.stats.pendingSubmissions ? (data.stats.pendingSubmissions * 50).toFixed(2) : '0.00'}
+                    </p>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50">
-                  <div className="flex items-center space-x-3">
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-500"></div>
-                    <span className="text-sm font-medium text-text-primary">ClipperPro</span>
+                {data.clippers && data.clippers.length > 0 ? (
+                  data.clippers.slice(0, 3).map((clipper) => (
+                    <div key={clipper.id} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50">
+                      <div className="flex items-center space-x-3">
+                        {clipper.avatarUrl ? (
+                          <img 
+                            src={clipper.avatarUrl} 
+                            alt={clipper.displayName}
+                            className="h-8 w-8 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                            {clipper.displayName.charAt(0)}
+                          </div>
+                        )}
+                        <span className="text-sm font-medium text-text-primary">{clipper.displayName}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm font-medium text-text-primary">
+                          ${clipper.totalEarned?.toFixed(2) || '0.00'}
+                        </span>
+                        <ArrowUpRight className="h-4 w-4 text-text-secondary" />
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-text-secondary">
+                    <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                    <p>No clippers yet</p>
+                    <p className="text-sm">Clippers will appear here when they join</p>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium text-text-primary">$250.00</span>
-                    <ArrowUpRight className="h-4 w-4 text-text-secondary" />
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50">
-                  <div className="flex items-center space-x-3">
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-400 to-blue-500"></div>
-                    <span className="text-sm font-medium text-text-primary">VideoWiz</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium text-text-primary">$200.75</span>
-                    <ArrowUpRight className="h-4 w-4 text-text-secondary" />
-                  </div>
-                </div>
+                )}
               </div>
 
               <Button className="w-full mt-4 bg-primary text-white hover:opacity-90">
