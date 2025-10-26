@@ -6,7 +6,7 @@ import { SubmissionForm } from '@/components/SubmissionForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Breadcrumbs, breadcrumbConfigs } from '@/components/layout/Breadcrumbs'
+import { Sidebar } from '@/components/layout/Sidebar'
 import { PageLoading } from '@/components/ui/loading'
 import { Loader2, CheckCircle, Clock, XCircle, DollarSign, Eye } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
@@ -40,7 +40,7 @@ interface Submission {
   }
 }
 
-export default function SubmitClipPage() {
+function SubmitClipContent() {
   const { user } = useAuth()
   const [creators, setCreators] = useState<Creator[]>([])
   const [submissions, setSubmissions] = useState<Submission[]>([])
@@ -123,43 +123,40 @@ export default function SubmitClipPage() {
   }
 
   if (loading) {
-    return <PageLoading message="Loading submission page..." />
+    return (
+      <Sidebar>
+        <div className="flex items-center justify-center h-full">
+          <PageLoading message="Loading submission page..." />
+        </div>
+      </Sidebar>
+    )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <XCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <p className="text-red-600 mb-4">Error: {error}</p>
-          <Button onClick={fetchData}>Try Again</Button>
+      <Sidebar>
+        <div className="flex items-center justify-center h-full">
+          <div className="text-center">
+            <XCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <p className="text-red-600 mb-4">Error: {error}</p>
+            <Button onClick={fetchData}>Try Again</Button>
+          </div>
         </div>
-      </div>
+      </Sidebar>
     )
   }
 
   return (
-    <div className="bg-gray-50">
-      {/* Breadcrumbs */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Breadcrumbs items={breadcrumbConfigs['/clipper/submit']} />
+    <Sidebar>
+      <div className="p-6">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-text-primary mb-2">Submit Clips</h1>
+          <p className="text-text-secondary text-lg">Submit your YouTube videos to creators for payment</p>
         </div>
-      </div>
 
-      {/* Page Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Submit Clips</h1>
-            <p className="text-gray-600">Submit your YouTube videos to creators for payment</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Submission Form */}
           <div className="lg:col-span-2">
             <SubmissionForm 
@@ -172,7 +169,7 @@ export default function SubmitClipPage() {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Recent Submissions</CardTitle>
+                <CardTitle className="text-lg font-bold">Recent Submissions</CardTitle>
                 <CardDescription>
                   Your latest clip submissions and their status
                 </CardDescription>
@@ -181,17 +178,17 @@ export default function SubmitClipPage() {
                 {submissions.length > 0 ? (
                   <div className="space-y-4">
                     {submissions.slice(0, 5).map((submission) => (
-                      <div key={submission.id} className="flex items-center space-x-3 p-3 border rounded-lg">
+                      <div key={submission.id} className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50">
                         <img
                           src={submission.videoThumbnail}
                           alt={submission.videoTitle}
                           className="w-12 h-8 object-cover rounded"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">
+                          <p className="text-sm font-medium text-text-primary truncate">
                             {submission.videoTitle}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-text-secondary">
                             to {submission.creator.displayName}
                           </p>
                           <div className="flex items-center space-x-2 mt-1">
@@ -205,7 +202,7 @@ export default function SubmitClipPage() {
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-gray-400">
+                          <p className="text-xs text-text-secondary">
                             {formatDistanceToNow(new Date(submission.submittedAt), { addSuffix: true })}
                           </p>
                         </div>
@@ -213,7 +210,8 @@ export default function SubmitClipPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center text-gray-500 py-8">
+                  <div className="text-center py-8 text-text-secondary">
+                    <Eye className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                     <p>No submissions yet</p>
                     <p className="text-sm">Submit your first clip above</p>
                   </div>
@@ -224,7 +222,7 @@ export default function SubmitClipPage() {
             {/* Available Creators */}
             <Card>
               <CardHeader>
-                <CardTitle>Available Creators</CardTitle>
+                <CardTitle className="text-lg font-bold">Available Creators</CardTitle>
                 <CardDescription>
                   Creators you can submit clips to
                 </CardDescription>
@@ -233,23 +231,23 @@ export default function SubmitClipPage() {
                 {creators.length > 0 ? (
                   <div className="space-y-3">
                     {creators.map((creator) => (
-                      <div key={creator.id} className="flex items-center space-x-3 p-3 border rounded-lg">
+                      <div key={creator.id} className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50">
                         {creator.avatarUrl ? (
                           <img
                             src={creator.avatarUrl}
                             alt={creator.displayName}
-                            className="h-8 w-8 rounded-full"
+                            className="h-8 w-8 rounded-full object-cover"
                           />
                         ) : (
-                          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                            <span className="text-blue-600 font-bold text-sm">
+                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-secondary/20 to-primary/20 flex items-center justify-center">
+                            <span className="text-secondary font-bold text-sm">
                               {creator.displayName.charAt(0)}
                             </span>
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium">{creator.displayName}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-sm font-medium text-text-primary">{creator.displayName}</p>
+                          <p className="text-xs text-text-secondary">
                             ${creator.rateAmount} per {creator.rateViews.toLocaleString()} views
                           </p>
                         </div>
@@ -257,7 +255,7 @@ export default function SubmitClipPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center text-gray-500 py-4">
+                  <div className="text-center py-4 text-text-secondary">
                     <p className="text-sm">No creators available</p>
                   </div>
                 )}
@@ -266,6 +264,10 @@ export default function SubmitClipPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Sidebar>
   )
+}
+
+export default function SubmitClipPage() {
+  return <SubmitClipContent />
 }

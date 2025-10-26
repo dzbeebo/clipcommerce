@@ -27,7 +27,7 @@ export default function ClipperOnboardingStep1() {
   }
 
   return (
-    <div className="bg-gradient-to-b from-green-50 to-white">
+    <div className="bg-gradient-to-b from-secondary/5 to-white">
       {/* Breadcrumbs */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -39,10 +39,10 @@ export default function ClipperOnboardingStep1() {
         <div className="w-full max-w-2xl">
           {/* Page Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-text-primary mb-2">
               Connect Your YouTube Channel
             </h1>
-            <p className="text-gray-600">
+            <p className="text-text-secondary">
               Step 1 of 3 - Verify ownership of your YouTube channel
             </p>
           </div>
@@ -51,10 +51,10 @@ export default function ClipperOnboardingStep1() {
         <div className="flex items-center justify-center mb-8">
           <div className="flex items-center space-x-4">
             <div className="flex items-center">
-              <div className="h-8 w-8 rounded-full bg-green-600 text-white flex items-center justify-center text-sm font-bold">
+              <div className="h-8 w-8 rounded-full bg-secondary text-white flex items-center justify-center text-sm font-bold">
                 1
               </div>
-              <span className="ml-2 text-sm font-medium text-green-600">YouTube Connect</span>
+              <span className="ml-2 text-sm font-medium text-secondary">YouTube Connect</span>
             </div>
             <div className="w-8 h-0.5 bg-gray-300"></div>
             <div className="flex items-center">
@@ -85,35 +85,35 @@ export default function ClipperOnboardingStep1() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-900 mb-2">Why do I need to connect YouTube?</h3>
-              <p className="text-green-800 text-sm">
+            <div className="bg-secondary/10 p-4 rounded-lg">
+              <h3 className="font-semibold text-secondary mb-2">Why do I need to connect YouTube?</h3>
+              <p className="text-text-secondary text-sm">
                 We need to verify that you own the YouTube channel you're submitting clips from. 
                 This prevents fraud and ensures you get paid for your own content.
               </p>
             </div>
 
             <div className="space-y-4">
-              <h3 className="font-semibold text-gray-900">What we'll access:</h3>
+              <h3 className="font-semibold text-text-primary">What we'll access:</h3>
               <ul className="space-y-2">
-                <li className="flex items-center text-gray-700">
+                <li className="flex items-center text-text-secondary">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   Your channel information (name, avatar, subscriber count)
                 </li>
-                <li className="flex items-center text-gray-700">
+                <li className="flex items-center text-text-secondary">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   Video metadata (title, views, publish date)
                 </li>
-                <li className="flex items-center text-gray-700">
+                <li className="flex items-center text-text-secondary">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   Channel ownership verification
                 </li>
               </ul>
             </div>
 
-            <div className="bg-yellow-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-yellow-900 mb-2">Privacy & Security</h3>
-              <p className="text-yellow-800 text-sm">
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-blue-900 mb-2">Privacy & Security</h3>
+              <p className="text-blue-800 text-sm">
                 <Shield className="h-4 w-4 inline mr-1" />
                 We only access the minimum required data. We never modify your videos or channel settings.
                 You can revoke access at any time.
@@ -123,10 +123,20 @@ export default function ClipperOnboardingStep1() {
             <Button
               onClick={handleConnectYouTube}
               disabled={isLoading}
-              className="w-full bg-red-600 hover:bg-red-700"
+              className="w-full bg-secondary text-white hover:opacity-90"
             >
-              {isLoading ? 'Connecting...' : 'Connect YouTube Channel'}
-              <ArrowRight className="ml-2 h-5 w-5" />
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Connecting...
+                </>
+              ) : (
+                <>
+                  <Youtube className="h-4 w-4 mr-2" />
+                  Connect YouTube Channel
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </>
+              )}
             </Button>
 
             <div className="text-center text-sm text-gray-500">
