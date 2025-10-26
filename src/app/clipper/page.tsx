@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Sidebar } from '@/components/layout/Sidebar'
-import { PageLoading } from '@/components/ui/loading'
+import { DashboardLoading } from '@/components/ui/loading'
 import { 
   DollarSign, 
   FileText, 
@@ -34,9 +34,7 @@ function ClipperDashboardContent() {
   if (loading) {
     return (
       <Sidebar>
-        <div className="flex items-center justify-center h-full">
-          <PageLoading message="Loading dashboard..." />
-        </div>
+        <DashboardLoading />
       </Sidebar>
     )
   }
@@ -58,9 +56,7 @@ function ClipperDashboardContent() {
   if (!data) {
     return (
       <Sidebar>
-        <div className="flex items-center justify-center h-full">
-          <PageLoading message="Preparing dashboard..." />
-        </div>
+        <DashboardLoading />
       </Sidebar>
     )
   }

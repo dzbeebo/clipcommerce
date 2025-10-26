@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from './useAuth'
+import { withCache, cacheKeys, CACHE_TTL } from '@/lib/cache'
 
 interface DashboardStats {
   totalPaidOut?: number
@@ -86,36 +87,47 @@ export function useDashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const fetchDashboardData = useCallback(async () => {
+    if (!user) return
+    
+    try {
+      setLoading(true)
+      setError(null)
+
+      const cacheKey = cacheKeys.dashboardData(user.id, user.role)
+      
+      const dashboardData = await withCache(
+        cacheKey,
+        async () => {
+          const endpoint = user.role === 'CREATOR' ? '/api/dashboard/creator' : '/api/dashboard/clipper'
+          const response = await fetch(endpoint)
+          
+          if (!response.ok) {
+            throw new Error('Failed to fetch dashboard data')
+          }
+
+          return response.json()
+        },
+        CACHE_TTL.DASHBOARD_DATA
+      )
+      
+      setData(dashboardData)
+    } catch (err) {
+      console.error('Error fetching dashboard data:', err)
+      setError(err instanceof Error ? err.message : 'An error occurred')
+    } finally {
+      setLoading(false)
+    }
+  }, [user?.id, user?.role])
+
   useEffect(() => {
     if (!user) {
       setLoading(false)
       return
     }
 
-    const fetchDashboardData = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-
-        const endpoint = user.role === 'CREATOR' ? '/api/dashboard/creator' : '/api/dashboard/clipper'
-        const response = await fetch(endpoint)
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch dashboard data')
-        }
-
-        const dashboardData = await response.json()
-        setData(dashboardData)
-      } catch (err) {
-        console.error('Error fetching dashboard data:', err)
-        setError(err instanceof Error ? err.message : 'An error occurred')
-      } finally {
-        setLoading(false)
-      }
-    }
-
     fetchDashboardData()
-  }, [user])
+  }, [user, fetchDashboardData])
 
   const refetch = async () => {
     if (!user) return

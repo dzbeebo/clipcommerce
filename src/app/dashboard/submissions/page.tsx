@@ -10,7 +10,9 @@ import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Breadcrumbs, breadcrumbConfigs } from '@/components/layout/Breadcrumbs'
+import { Sidebar } from '@/components/layout/Sidebar'
 import { Loader2, CheckCircle, XCircle, Clock, DollarSign, Eye, ThumbsUp, MessageCircle, ExternalLink, AlertTriangle } from 'lucide-react'
+import { SkeletonTable } from '@/components/ui/loading'
 import { formatDistanceToNow } from 'date-fns'
 
 interface Submission {
@@ -228,12 +230,14 @@ export default function SubmissionsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-600">Loading submissions...</p>
+      <Sidebar>
+        <div className="p-6">
+          <Breadcrumbs items={breadcrumbConfigs['/dashboard/submissions']} />
+          <div className="mt-6">
+            <SkeletonTable />
+          </div>
         </div>
-      </div>
+      </Sidebar>
     )
   }
 

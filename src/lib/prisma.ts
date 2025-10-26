@@ -24,7 +24,7 @@ const getDatabaseUrl = () => {
   return url
 }
 
-// Create a new Prisma client instance
+// Create a new Prisma client instance with optimizations
 const createPrismaClient = () => {
   return new PrismaClient({
     datasources: {
@@ -33,6 +33,11 @@ const createPrismaClient = () => {
       },
     },
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    // Performance optimizations
+    transactionOptions: {
+      maxWait: 5000, // 5 seconds
+      timeout: 10000, // 10 seconds
+    },
   })
 }
 
@@ -41,4 +46,60 @@ export const prisma = globalForPrisma.prisma ?? createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma
+}
+
+// Database query optimization utilities
+export const dbOptimizations = {
+  // Batch multiple queries for better performance
+  async batchQueries<T>(queries: (() => Promise<T>)[]): Promise<T[]> {
+    return Promise.all(queries.map(query => query()))
+  },
+
+  // Optimized user lookup with caching
+  async getUserWithProfile(userId: string) {
+    return prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        creatorProfile: {
+          include: {
+            clippers: {
+              where: { status: 'ACTIVE' },
+              take: 5,
+              include: {
+                clipper: {
+                  select: {
+                    id: true,
+                    displayName: true,
+                    avatarUrl: true,
+                    totalEarned: true,
+                    lastActiveAt: true,
+                  }
+                }
+              }
+            }
+          }
+        },
+        clipperProfile: {
+          include: {
+            memberships: {
+              where: { status: 'ACTIVE' },
+              take: 5,
+              include: {
+                creator: {
+                  select: {
+                    id: true,
+                    displayName: true,
+                    avatarUrl: true,
+                    slug: true,
+                    rateAmount: true,
+                    rateViews: true,
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+  }
 }

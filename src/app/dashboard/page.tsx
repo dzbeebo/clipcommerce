@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Sidebar } from '@/components/layout/Sidebar'
-import { PageLoading } from '@/components/ui/loading'
+import { DashboardLoading } from '@/components/ui/loading'
 import { 
   DollarSign, 
   Users, 
@@ -22,20 +22,21 @@ import {
   Settings
 } from 'lucide-react'
 import Link from 'next/link'
-import { formatDistanceToNow } from 'date-fns'
 import { useState } from 'react'
+import { formatDistanceToNow } from 'date-fns'
+import { usePerformanceTracking } from '@/lib/performance'
 
 function CreatorDashboardContent() {
   const { user } = useAuth()
   const { data, loading, error, refetch } = useDashboard()
   const [showAnalytics, setShowAnalytics] = useState(false)
+  
+  usePerformanceTracking('creator-dashboard')
 
   if (loading) {
     return (
       <Sidebar>
-        <div className="flex items-center justify-center h-full">
-          <PageLoading message="Loading dashboard..." />
-        </div>
+        <DashboardLoading />
       </Sidebar>
     )
   }
@@ -57,9 +58,7 @@ function CreatorDashboardContent() {
   if (!data) {
     return (
       <Sidebar>
-        <div className="flex items-center justify-center h-full">
-          <PageLoading message="Preparing dashboard..." />
-        </div>
+        <DashboardLoading />
       </Sidebar>
     )
   }
@@ -263,13 +262,13 @@ function CreatorDashboardContent() {
 function ClipperDashboardContent() {
   const { user } = useAuth()
   const { data, loading, error, refetch } = useDashboard()
+  
+  usePerformanceTracking('clipper-dashboard')
 
   if (loading) {
     return (
       <Sidebar>
-        <div className="flex items-center justify-center h-full">
-          <PageLoading message="Loading dashboard..." />
-        </div>
+        <DashboardLoading />
       </Sidebar>
     )
   }
@@ -291,9 +290,7 @@ function ClipperDashboardContent() {
   if (!data) {
     return (
       <Sidebar>
-        <div className="flex items-center justify-center h-full">
-          <PageLoading message="Preparing dashboard..." />
-        </div>
+        <DashboardLoading />
       </Sidebar>
     )
   }
