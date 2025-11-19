@@ -38,7 +38,21 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   // Check if under construction mode is enabled
-  const isUnderConstruction = process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION === 'true'
+  // Handle both string "true" and boolean true, case-insensitive
+  const underConstructionEnv = process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION
+  const isUnderConstruction = 
+    underConstructionEnv === 'true' || 
+    underConstructionEnv === 'True' || 
+    underConstructionEnv === 'TRUE' ||
+    underConstructionEnv === '1'
+
+  // Debug logging (only in development)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔧 Under Construction Mode:', {
+      envValue: underConstructionEnv,
+      isEnabled: isUnderConstruction
+    })
+  }
 
   return (
     <html lang="en">
