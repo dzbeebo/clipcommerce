@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Loader2, Users, DollarSign, FileText, TrendingUp, AlertTriangle, CheckCircle, XCircle, Eye, Settings, Clock } from 'lucide-react'
+import { Loader2, Users, DollarSign, FileText, TrendingUp, AlertTriangle, CheckCircle, XCircle, Eye, Settings, Clock, Cog } from 'lucide-react'
+import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
 
 interface AdminStats {
@@ -122,6 +123,12 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <Link href="/admin/settings">
+                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <Cog className="h-4 w-4" />
+                  Settings
+                </Button>
+              </Link>
               <Badge variant="outline" className="text-purple-600 border-purple-200">
                 Admin
               </Badge>

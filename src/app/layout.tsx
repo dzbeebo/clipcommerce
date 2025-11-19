@@ -5,8 +5,8 @@ import { Toaster } from '@/components/ui/sonner'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { AuthProvider } from '@/contexts/AuthContext'
-import { ConditionalLayout } from '@/components/layout/ConditionalLayout'
-import { UnderConstruction } from '@/components/UnderConstruction'
+import { MasqueradeProvider } from '@/contexts/MasqueradeContext'
+import { UnderConstructionGate } from '@/components/UnderConstructionGate'
 
 const beVietnamPro = Be_Vietnam_Pro({ 
   subsets: ['latin'],
@@ -58,13 +58,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${beVietnamPro.variable} font-display bg-background-light text-text-primary`}>
         <AuthProvider>
-          {isUnderConstruction ? (
-            <UnderConstruction />
-          ) : (
-            <ConditionalLayout>
+          <MasqueradeProvider>
+            <UnderConstructionGate isUnderConstruction={isUnderConstruction}>
               {children}
-            </ConditionalLayout>
-          )}
+            </UnderConstructionGate>
+          </MasqueradeProvider>
         </AuthProvider>
         <Toaster />
       </body>

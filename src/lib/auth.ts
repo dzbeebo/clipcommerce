@@ -13,6 +13,41 @@ export interface User {
 export async function getCurrentUser(): Promise<User | null> {
   try {
     const cookieStore = await cookies()
+    
+    // Check if masquerading
+    const masqueradeUserId = cookieStore.get('masquerade-user-id')?.value
+    const masqueradeAdminId = cookieStore.get('masquerade-admin-id')?.value
+    
+    if (masqueradeUserId && masqueradeAdminId) {
+      // Verify admin is still valid
+      const adminUser = await prisma.user.findUnique({
+        where: { id: masqueradeAdminId },
+        select: { role: true }
+      })
+      
+      if (adminUser?.role === 'ADMIN') {
+        // Return masquerade user
+        const masqueradeUser = await prisma.user.findUnique({
+          where: { id: masqueradeUserId },
+          select: {
+            id: true,
+            email: true,
+            role: true,
+            onboardingComplete: true,
+            stripeAccountId: true,
+          }
+        })
+        
+        if (masqueradeUser) {
+          return masqueradeUser as User
+        }
+      } else {
+        // Invalid masquerade, clear cookies
+        cookieStore.delete('masquerade-user-id')
+        cookieStore.delete('masquerade-admin-id')
+      }
+    }
+    
     const accessToken = cookieStore.get('sb-access-token')?.value
     
     if (!accessToken) {
@@ -46,6 +81,33 @@ export async function getCurrentUser(): Promise<User | null> {
     return user as User
   } catch (error) {
     console.error('Error getting current user:', error)
+    return null
+  }
+}
+
+export async function getOriginalAdminUser(): Promise<User | null> {
+  try {
+    const cookieStore = await cookies()
+    const masqueradeAdminId = cookieStore.get('masquerade-admin-id')?.value
+    
+    if (!masqueradeAdminId) {
+      return null
+    }
+    
+    const adminUser = await prisma.user.findUnique({
+      where: { id: masqueradeAdminId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        onboardingComplete: true,
+        stripeAccountId: true,
+      }
+    })
+    
+    return adminUser as User | null
+  } catch (error) {
+    console.error('Error getting original admin user:', error)
     return null
   }
 }

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useMasquerade } from '@/contexts/MasqueradeContext'
 import { useNotifications } from '@/hooks/useNotifications'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -20,13 +21,15 @@ import {
   User,
   Video,
   DollarSign,
-  FileText
+  FileText,
+  Eye
 } from 'lucide-react'
 import { NotificationCenter } from '@/components/NotificationCenter'
 
 export function Header() {
   const { user, logout } = useAuth()
   const { isAuthenticated, forceSessionCheck } = useAuthContext()
+  const { isMasquerading, originalUser } = useMasquerade()
   const { unreadCount } = useNotifications(user?.id)
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -62,11 +65,17 @@ export function Header() {
   }, [])
 
   const navigationItems = isAuthenticated ? [
+    ...(user?.role === 'ADMIN' ? [{
+      name: 'Admin',
+      href: '/admin',
+      icon: Settings,
+      current: pathname.startsWith('/admin')
+    }] : []),
     {
       name: 'Dashboard',
-      href: userRole === 'CREATOR' ? '/creator' : '/clipper',
+      href: userRole === 'CREATOR' ? '/creator' : userRole === 'CLIPPER' ? '/clipper' : '/admin',
       icon: Home,
-      current: pathname === '/creator' || pathname === '/clipper'
+      current: pathname === '/creator' || pathname === '/clipper' || pathname === '/admin'
     },
     ...(userRole === 'CREATOR' ? [
       {
@@ -197,6 +206,12 @@ export function Header() {
 
                 {/* User menu */}
                 <div className="flex items-center space-x-2">
+                  {isMasquerading && (
+                    <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 text-xs">
+                      <Eye className="h-3 w-3 mr-1" />
+                      Masquerading
+                    </Badge>
+                  )}
                   <div className="flex items-center space-x-2 text-sm text-gray-700">
                     <User className="h-4 w-4" />
                     <span>{user?.email}</span>
@@ -271,6 +286,14 @@ export function Header() {
                     )
                   })}
                   <div className="border-t border-gray-200 pt-4 mt-4">
+                    {isMasquerading && (
+                      <div className="px-3 py-2 mb-2">
+                        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 text-xs">
+                          <Eye className="h-3 w-3 mr-1" />
+                          Masquerading
+                        </Badge>
+                      </div>
+                    )}
                     <div className="flex items-center px-3 py-2 text-sm text-gray-700">
                       <User className="h-4 w-4 mr-2" />
                       <span>{user?.email}</span>
