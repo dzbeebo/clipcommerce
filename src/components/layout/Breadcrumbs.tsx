@@ -104,6 +104,11 @@ export const breadcrumbConfigs = {
     { label: 'Creator Dashboard', href: '/creator' },
     { label: 'Analytics', href: '/creator/analytics' }
   ],
+  '/creator/settings': [
+    { label: 'Home', href: '/' },
+    { label: 'Creator Dashboard', href: '/creator' },
+    { label: 'Settings', href: '/creator/settings' }
+  ],
   // Legacy dashboard URLs for backward compatibility
   '/dashboard': [
     { label: 'Home', href: '/' },
