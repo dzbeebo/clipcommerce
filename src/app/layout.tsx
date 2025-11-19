@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ConditionalLayout } from '@/components/layout/ConditionalLayout'
+import { UnderConstruction } from '@/components/UnderConstruction'
 
 const beVietnamPro = Be_Vietnam_Pro({ 
   subsets: ['latin'],
@@ -36,13 +37,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Check if under construction mode is enabled
+  const isUnderConstruction = process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION === 'true'
+
   return (
     <html lang="en">
       <body className={`${beVietnamPro.variable} font-display bg-background-light text-text-primary`}>
         <AuthProvider>
-          <ConditionalLayout>
-            {children}
-          </ConditionalLayout>
+          {isUnderConstruction ? (
+            <UnderConstruction />
+          ) : (
+            <ConditionalLayout>
+              {children}
+            </ConditionalLayout>
+          )}
         </AuthProvider>
         <Toaster />
       </body>

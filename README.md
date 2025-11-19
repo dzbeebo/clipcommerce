@@ -114,6 +114,10 @@ ENCRYPTION_KEY=your_32_character_encryption_key
 
 # App
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# Under Construction Mode (optional)
+# Set to 'true' to enable the under construction page
+NEXT_PUBLIC_UNDER_CONSTRUCTION=false
 ```
 
 4. **Set up the database**
