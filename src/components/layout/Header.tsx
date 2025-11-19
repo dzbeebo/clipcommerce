@@ -121,7 +121,7 @@ export function Header() {
                   <path clipRule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor" fillRule="evenodd"></path>
                 </svg>
               </div>
-              <span className="ml-2 text-xl font-bold text-text-primary">ClipMarket</span>
+              <span className="ml-2 text-xl font-bold text-text-primary">ClippingMarket</span>
             </Link>
           </div>
 

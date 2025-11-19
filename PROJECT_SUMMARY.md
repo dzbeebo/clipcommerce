@@ -1,7 +1,7 @@
-# ClipCommerce Project Summary
+# ClippingMarket Project Summary
 
 ## 🎯 Project Overview
-ClipCommerce is a two-sided marketplace platform that connects content creators with clippers for automated clip submission, verification, approval, and payment processing.
+ClippingMarket is a two-sided marketplace platform that connects content creators with clippers for automated clip submission, verification, approval, and payment processing.
 
 ## ✅ Current Status: Phase 3 Advanced Features Complete
 

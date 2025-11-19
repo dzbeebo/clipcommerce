@@ -1,6 +1,6 @@
-# ClipCommerce Deployment Guide
+# ClippingMarket Deployment Guide
 
-This guide covers deploying ClipCommerce to production environments.
+This guide covers deploying ClippingMarket to production environments.
 
 ## Prerequisites
 
@@ -120,8 +120,8 @@ NODE_ENV="production"
 
 2. **Build and run:**
    ```bash
-   docker build -t clipcommerce .
-   docker run -p 3000:3000 clipcommerce
+   docker build -t clippingmarket .
+   docker run -p 3000:3000 clippingmarket
    ```
 
 ### AWS EC2
@@ -135,8 +135,8 @@ NODE_ENV="production"
 
 3. **Clone and build:**
    ```bash
-   git clone https://github.com/yourusername/clipcommerce.git
-   cd clipcommerce
+   git clone https://github.com/yourusername/clippingmarket.git
+   cd clippingmarket
    npm install
    npm run build
    ```
@@ -144,7 +144,7 @@ NODE_ENV="production"
 4. **Configure PM2:**
    ```bash
    npm install -g pm2
-   pm2 start npm --name "clipcommerce" -- start
+   pm2 start npm --name "clippingmarket" -- start
    pm2 save
    pm2 startup
    ```
@@ -310,7 +310,7 @@ NODE_ENV="production"
   - Use Vercel MCP server to access deployment logs programmatically
   - Monitor build logs and runtime logs through MCP integration
 - **Docker:** `docker logs container-name`
-- **PM2:** `pm2 logs clipcommerce`
+- **PM2:** `pm2 logs clippingmarket`
 
 ## Scaling
 

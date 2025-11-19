@@ -1,7 +1,7 @@
-# Supabase API Keys Implementation for ClipCommerce
+# Supabase API Keys Implementation for ClippingMarket
 
 ## 🎯 Overview
-This document outlines the implementation of Supabase's new API key system for ClipCommerce, using the new `sb_publishable_...` and `sb_secret_...` keys from the start to avoid future migration complexity.
+This document outlines the implementation of Supabase's new API key system for ClippingMarket, using the new `sb_publishable_...` and `sb_secret_...` keys from the start to avoid future migration complexity.
 
 ## ✅ Implementation Status
 - **Current Phase:** New Keys Only (Implemented)

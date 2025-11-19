@@ -1,7 +1,7 @@
 🚀 Product Requirements Document (PRD) - UPDATED
 ================================================
 
-**Product Name:** ClipCommerce (working title)\
+**Product Name:** ClippingMarket\
 **Version:** v1.1 - MVP (Updated Account Creation Flow)\
 **Author:** PM-AI\
 **Date:** October 18, 2025\
@@ -30,7 +30,7 @@ CHANGELOG (v1.1)
 
 ### Overview
 
-ClipCommerce is a two-sided marketplace platform that connects content creators with "clippers" - content creators who specialize in creating and distributing short-form clips from longer-form content. The platform automates the workflow of clip submission, verification, approval, payment processing, and performance analytics.
+ClippingMarket is a two-sided marketplace platform that connects content creators with "clippers" - content creators who specialize in creating and distributing short-form clips from longer-form content. The platform automates the workflow of clip submission, verification, approval, payment processing, and performance analytics.
 
 ### Business Model
 
@@ -327,7 +327,7 @@ Landing Page → "Get Started" → Account Type Selection → Role-Specific Sign
 
 -   [ ]  Homepage has prominent "Get Started" or "Sign Up" button
 -   [ ]  Clicking redirects to `/signup` page
--   [ ]  Signup page displays hero section with headline: "Join ClipCommerce"
+-   [ ]  Signup page displays hero section with headline: "Join ClippingMarket"
 -   [ ]  Two clear account type cards displayed side-by-side:
     -   **Creator Card:**
         -   Icon: 🎬 or similar
@@ -549,7 +549,7 @@ export function middleware(request: NextRequest) {
         -   **Profile Description** (optional, textarea, max 500 chars, shows character count)
         -   **Avatar Upload** (optional, accepts image files, max 5MB, shows preview)
         -   **Profile URL Slug** (auto-generated from display name, editable, validates uniqueness)
-            -   Shows preview: `clipcommerce.com/creator/[slug]`
+            -   Shows preview: `clippingmarket.com/creator/[slug]`
 -   [ ]  Payment rate configuration section:
     -   Heading: "Set Your Payment Rate"
     -   Input: **Amount ($)** (number, min $1, max $1000)
@@ -726,7 +726,7 @@ export function middleware(request: NextRequest) {
     -   Marks onboarding as complete
     -   Redirects to `/clipper` (clipper dashboard)
 -   [ ]  Dashboard shows empty state:
-    -   Welcome message: "Welcome to ClipCommerce, [Name]!"
+    -   Welcome message: "Welcome to ClippingMarket, [Name]!"
     -   CTA card: "Browse Creators - Find creators to work with"
     -   CTA card: "Learn How It Works - Watch tutorial video"
 
@@ -826,7 +826,7 @@ export function middleware(request: NextRequest) {
 -   [ ]  Creator navigates to `/dashboard/settings/profile`
 -   [ ]  Page shows:
     -   Current profile preview (as clippers see it)
-    -   Public profile URL: `clipcommerce.com/creator/[slug]`
+    -   Public profile URL: `clippingmarket.com/creator/[slug]`
     -   "Copy Link" button (copies URL
 
 H
@@ -844,7 +844,7 @@ Continue
 -   [ ]  Creator navigates to `/dashboard/settings/profile`
 -   [ ]  Page shows:
     -   Current profile preview (as clippers see it)
-    -   Public profile URL: `clipcommerce.com/creator/[slug]`
+    -   Public profile URL: `clippingmarket.com/creator/[slug]`
     -   "Copy Link" button (copies URL to clipboard)
     -   "Share on Twitter" button (opens pre-filled tweet)
     -   "Edit Profile" button → redirects to edit form
@@ -2579,7 +2579,7 @@ When ready to begin development with an AI agent, provide:
 
 **Suggested First Prompt to Developer Agent:**
 ```
-I need you to build ClipCommerce MVP with role-based account creation.
+I need you to build ClippingMarket MVP with role-based account creation.
 
 Key Requirements:
 1. Users choose between Creator or Clipper account at signup
@@ -2694,7 +2694,7 @@ STEP 2: PROFILE SETUP (/onboarding/creator/step-2)
    - Description (optional, 500 char max)
    - Avatar Upload (optional, 5MB max)
    - Profile Slug (auto-generated, editable)
-   - Preview: clipcommerce.com/creator/[slug]
+   - Preview: clippingmarket.com/creator/[slug]
 3. Payment Rate Configuration:
    - Amount ($): Number input
    - Per X Views: Number input
@@ -2735,7 +2735,7 @@ STEP 3: SUBSCRIPTION SELECTION (/onboarding/creator/step-3)
 11. Redirect to /dashboard with success toast
 
 DASHBOARD FIRST VISIT:
-1. Shows welcome message: "Welcome to ClipCommerce, [Name]!"
+1. Shows welcome message: "Welcome to ClippingMarket, [Name]!"
 2. Empty state cards:
    - "No clippers yet"
    - "Share your profile to get started"
@@ -3252,7 +3252,7 @@ END OF FLOW
 -   **Stripe Connect:** Stripe's product for marketplace/platform payments
 -   **Connected Account:** A Stripe account linked to the platform for payouts or receiving funds
 -   **Express Account:** Stripe account type with simplified onboarding (used for clippers and creators)
--   **Platform Fee/Commission:** The percentage taken by ClipCommerce on each transaction
+-   **Platform Fee/Commission:** The percentage taken by ClippingMarket on each transaction
 -   **Auto-Approval:** Feature allowing creators to automatically approve clips from trusted clippers
 -   **Onboarding:** The multi-step process new users complete after signup to activate their account
 -   **Role-Based Access Control (RBAC):** System that restricts dashboard access based on user role

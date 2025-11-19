@@ -20,7 +20,7 @@ export default function HowItWorksPage() {
       <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            How ClipCommerce Works
+            How ClippingMarket Works
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             Connect creators with skilled clippers to automate content monetization. 
@@ -321,7 +321,7 @@ export default function HowItWorksPage() {
             Ready to Get Started?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of creators and clippers who are already earning with ClipCommerce.
+            Join thousands of creators and clippers who are already earning with ClippingMarket.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/signup/creator">
@@ -349,7 +349,7 @@ export default function HowItWorksPage() {
                 <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center">
                   <span className="text-white font-bold text-lg">C</span>
                 </div>
-                <span className="text-xl font-bold">ClipCommerce</span>
+                <span className="text-xl font-bold">ClippingMarket</span>
               </div>
               <p className="text-gray-400">
                 Connecting creators with clippers for automated content monetization.
@@ -381,7 +381,7 @@ export default function HowItWorksPage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 ClipCommerce. All rights reserved.</p>
+            <p>&copy; 2024 ClippingMarket. All rights reserved.</p>
           </div>
         </div>
       </footer>

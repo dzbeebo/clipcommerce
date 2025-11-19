@@ -27,7 +27,7 @@ export default function ApiDocsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              ClipCommerce API Documentation
+              ClippingMarket API Documentation
             </h1>
             <p className="text-lg text-gray-600">
               Complete API reference for developers

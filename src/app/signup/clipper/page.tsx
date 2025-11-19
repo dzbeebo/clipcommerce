@@ -65,7 +65,7 @@ export default function ClipperSignupPage() {
             <div className="h-10 w-10 rounded-lg bg-green-600 flex items-center justify-center">
               <Scissors className="h-6 w-6 text-white" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">ClipCommerce</span>
+            <span className="text-2xl font-bold text-gray-900">ClippingMarket</span>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Create Your Clipper Account

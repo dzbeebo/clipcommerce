@@ -1,4 +1,4 @@
-# 🎬 ClipCommerce
+# 🎬 ClippingMarket
 
 A two-sided marketplace platform that connects content creators with clippers for automated clip submission, verification, approval, and payment processing.
 
@@ -77,8 +77,8 @@ A two-sided marketplace platform that connects content creators with clippers fo
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/dzbeebo/clipcommerce.git
-cd clipcommerce
+git clone https://github.com/dzbeebo/clippingmarket.git
+cd clippingmarket
 ```
 
 2. **Install dependencies**
@@ -316,4 +316,4 @@ For support, please contact the development team or create an issue in the repos
 
 ---
 
-**Built with ❤️ by the ClipCommerce team**
+**Built with ❤️ by the ClippingMarket team**

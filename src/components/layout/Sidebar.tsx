@@ -104,7 +104,7 @@ export function Sidebar({ children }: SidebarProps) {
               </svg>
             </div>
             {!isCollapsed && (
-              <span className="ml-2 text-xl font-bold text-text-primary">ClipMarket</span>
+              <span className="ml-2 text-xl font-bold text-text-primary">ClippingMarket</span>
             )}
           </Link>
         </div>

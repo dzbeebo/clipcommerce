@@ -12,14 +12,14 @@ export function Footer() {
                 <path clipRule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor" fillRule="evenodd"></path>
               </svg>
             </div>
-            <h2 className="text-text-primary text-xl font-bold">ClipMarket</h2>
+            <h2 className="text-text-primary text-xl font-bold">ClippingMarket</h2>
           </div>
           <div className="flex gap-6">
             <a className="text-text-secondary hover:text-primary" href="#">Terms</a>
             <a className="text-text-secondary hover:text-primary" href="#">Privacy</a>
             <a className="text-text-secondary hover:text-primary" href="#">Contact</a>
           </div>
-          <p className="text-sm text-text-secondary">© 2024 ClipMarket. All rights reserved.</p>
+          <p className="text-sm text-text-secondary">© 2024 ClippingMarket. All rights reserved.</p>
         </div>
       </div>
     </footer>

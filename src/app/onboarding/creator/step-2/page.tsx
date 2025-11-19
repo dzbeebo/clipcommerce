@@ -70,7 +70,7 @@ export default function CreatorOnboardingStep2() {
             <div className="h-10 w-10 rounded-lg bg-blue-600 flex items-center justify-center">
               <span className="text-white font-bold text-xl">C</span>
             </div>
-            <span className="text-2xl font-bold text-gray-900">ClipCommerce</span>
+            <span className="text-2xl font-bold text-gray-900">ClippingMarket</span>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Set Up Your Profile
@@ -155,7 +155,7 @@ export default function CreatorOnboardingStep2() {
               <div className="space-y-2">
                 <Label htmlFor="slug">Profile URL *</Label>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-500">clipcommerce.com/creator/</span>
+                  <span className="text-sm text-gray-500">clippingmarket.com/creator/</span>
                   <Input
                     id="slug"
                     placeholder="your-username"

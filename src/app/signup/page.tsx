@@ -12,7 +12,7 @@ export default function SignupPage() {
         {/* Page Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Join ClipCommerce
+            Join ClippingMarket
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Choose your account type to get started. You can always change your role later.

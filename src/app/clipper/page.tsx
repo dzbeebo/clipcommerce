@@ -274,7 +274,7 @@ function ClipperDashboardContent() {
           <CardHeader>
             <CardTitle className="text-lg font-bold">Getting Started</CardTitle>
             <CardDescription>
-              Complete these steps to start earning with ClipMarket
+              Complete these steps to start earning with ClippingMarket
             </CardDescription>
           </CardHeader>
           <CardContent>

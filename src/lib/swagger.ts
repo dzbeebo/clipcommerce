@@ -4,12 +4,12 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'ClipCommerce API',
+      title: 'ClippingMarket API',
       version: '1.0.0',
       description: 'A two-sided marketplace platform that connects content creators with clippers for automated clip submission, verification, approval, and payment processing.',
       contact: {
-        name: 'ClipCommerce Team',
-        email: 'support@clipcommerce.com',
+        name: 'ClippingMarket Team',
+        email: 'support@clippingmarket.com',
       },
       license: {
         name: 'MIT',
@@ -19,7 +19,7 @@ const options = {
     servers: [
       {
         url: process.env.NODE_ENV === 'production' 
-          ? 'https://clipcommerce.com/api' 
+          ? 'https://clippingmarket.com/api' 
           : 'http://localhost:3000/api',
         description: process.env.NODE_ENV === 'production' ? 'Production server' : 'Development server',
       },

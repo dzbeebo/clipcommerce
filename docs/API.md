@@ -1,6 +1,6 @@
-# ClipCommerce API Documentation
+# ClippingMarket API Documentation
 
-This document provides comprehensive information about the ClipCommerce API endpoints.
+This document provides comprehensive information about the ClippingMarket API endpoints.
 
 ## Base URL
 
@@ -509,13 +509,13 @@ The API accepts YouTube webhooks for video updates:
 ### JavaScript/TypeScript
 
 ```bash
-npm install @clipcommerce/api-client
+npm install @clippingmarket/api-client
 ```
 
 ```javascript
-import { ClipCommerceAPI } from '@clipcommerce/api-client'
+import { ClippingMarketAPI } from '@clippingmarket/api-client'
 
-const api = new ClipCommerceAPI({
+const api = new ClippingMarketAPI({
   baseURL: 'https://yourdomain.com/api',
   apiKey: 'your-api-key'
 })
@@ -534,13 +534,13 @@ const submission = await api.submissions.create({
 ### Python
 
 ```bash
-pip install clipcommerce-api
+pip install clippingmarket-api
 ```
 
 ```python
-from clipcommerce import ClipCommerceAPI
+from clippingmarket import ClippingMarketAPI
 
-api = ClipCommerceAPI(
+api = ClippingMarketAPI(
     base_url='https://yourdomain.com/api',
     api_key='your-api-key'
 )

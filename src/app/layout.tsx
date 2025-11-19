@@ -14,20 +14,20 @@ const beVietnamPro = Be_Vietnam_Pro({
 })
 
 export const metadata: Metadata = {
-  title: 'ClipMarket - Monetize Your Content with Clips',
-  description: 'Turn your best moments into viral clips and cash. ClipMarket connects content creators with talented clippers to produce shareable, viral-ready video clips.',
+  title: 'ClippingMarket - Monetize Your Content with Clips',
+  description: 'Turn your best moments into viral clips and cash. ClippingMarket connects content creators with talented clippers to produce shareable, viral-ready video clips.',
   keywords: ['content creation', 'clippers', 'youtube', 'payments', 'marketplace', 'viral clips'],
-  authors: [{ name: 'ClipMarket Team' }],
+  authors: [{ name: 'ClippingMarket Team' }],
   openGraph: {
-    title: 'ClipMarket - Monetize Your Content with Clips',
-    description: 'Turn your best moments into viral clips and cash. ClipMarket connects content creators with talented clippers to produce shareable, viral-ready video clips.',
+    title: 'ClippingMarket - Monetize Your Content with Clips',
+    description: 'Turn your best moments into viral clips and cash. ClippingMarket connects content creators with talented clippers to produce shareable, viral-ready video clips.',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ClipMarket - Monetize Your Content with Clips',
-    description: 'Turn your best moments into viral clips and cash. ClipMarket connects content creators with talented clippers to produce shareable, viral-ready video clips.',
+    title: 'ClippingMarket - Monetize Your Content with Clips',
+    description: 'Turn your best moments into viral clips and cash. ClippingMarket connects content creators with talented clippers to produce shareable, viral-ready video clips.',
   },
 }
 

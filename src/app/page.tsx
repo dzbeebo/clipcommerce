@@ -16,7 +16,7 @@ export default function HomePage() {
             Turn Your Best Moments into<br className="hidden md:block"/> Viral <span className="text-primary">Clips</span> and <span className="text-secondary">Cash</span>
           </h1>
           <p className="max-w-3xl mx-auto text-text-secondary text-lg md:text-xl mb-10">
-            ClipMarket connects content creators with talented clippers to produce shareable, viral-ready video clips. More views, more engagement, more earnings.
+            ClippingMarket connects content creators with talented clippers to produce shareable, viral-ready video clips. More views, more engagement, more earnings.
           </p>
           <div className="flex justify-center gap-4">
             <Link href="/signup">
@@ -126,7 +126,7 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-2xl shadow-lg transform hover:-translate-y-2 transition-transform">
-              <p className="text-text-secondary mb-6">"ClipMarket has been a game-changer for my channel. I can focus on creating content while the clippers handle making it shareable. My engagement has doubled!"</p>
+              <p className="text-text-secondary mb-6">"ClippingMarket has been a game-changer for my channel. I can focus on creating content while the clippers handle making it shareable. My engagement has doubled!"</p>
               <div className="flex items-center gap-4">
                 <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 bg-gradient-to-br from-blue-400 to-purple-500"></div>
                 <div>
@@ -136,7 +136,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="bg-white p-8 rounded-2xl shadow-lg transform hover:-translate-y-2 transition-transform">
-              <p className="text-text-secondary mb-6">"As a clipper, finding consistent work was tough. ClipMarket's marketplace is amazing. I have a steady stream of projects and get paid securely. Highly recommend."</p>
+              <p className="text-text-secondary mb-6">"As a clipper, finding consistent work was tough. ClippingMarket's marketplace is amazing. I have a steady stream of projects and get paid securely. Highly recommend."</p>
               <div className="flex items-center gap-4">
                 <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 bg-gradient-to-br from-green-400 to-blue-500"></div>
                 <div>
@@ -166,7 +166,7 @@ export default function HomePage() {
             <div className="absolute -bottom-16 -left-16 size-48 bg-white/10 rounded-full"></div>
             <div className="absolute -top-16 -right-16 size-48 bg-white/10 rounded-full"></div>
             <h2 className="text-3xl md:text-4xl font-black text-white mb-4 relative z-10">Ready to Amplify Your Content?</h2>
-            <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8 relative z-10">Join ClipMarket today and start turning your videos into viral masterpieces. It's free to get started!</p>
+            <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8 relative z-10">Join ClippingMarket today and start turning your videos into viral masterpieces. It's free to get started!</p>
             <Link href="/signup">
               <Button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-white text-primary text-base font-bold leading-normal tracking-[0.015em] gap-2 mx-auto relative z-10 transform hover:scale-105 transition-transform">
                 <span>Sign Up Now</span>

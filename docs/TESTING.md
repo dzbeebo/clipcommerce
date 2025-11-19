@@ -1,10 +1,10 @@
-# ClipCommerce Testing Guide
+# ClippingMarket Testing Guide
 
-This guide covers testing strategies and best practices for the ClipCommerce platform.
+This guide covers testing strategies and best practices for the ClippingMarket platform.
 
 ## Testing Overview
 
-ClipCommerce uses a comprehensive testing strategy with multiple layers:
+ClippingMarket uses a comprehensive testing strategy with multiple layers:
 
 - **Unit Tests:** Jest + React Testing Library
 - **Integration Tests:** API route testing

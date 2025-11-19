@@ -101,7 +101,7 @@ export default function CreatorOnboardingStep3() {
             <div className="h-10 w-10 rounded-lg bg-blue-600 flex items-center justify-center">
               <span className="text-white font-bold text-xl">C</span>
             </div>
-            <span className="text-2xl font-bold text-gray-900">ClipCommerce</span>
+            <span className="text-2xl font-bold text-gray-900">ClippingMarket</span>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Choose Your Plan
