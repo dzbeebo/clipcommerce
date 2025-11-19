@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { UnderConstruction } from './UnderConstruction'
 import { ConditionalLayout } from './layout/ConditionalLayout'
@@ -10,13 +11,29 @@ interface UnderConstructionGateProps {
   children: React.ReactNode
 }
 
+// Routes that should always be accessible, even during under construction
+const EXCLUDED_ROUTES = [
+  '/login',
+  '/signup',
+  '/signup/creator',
+  '/signup/clipper',
+  '/forgot-password',
+  '/api',
+  '/_next',
+  '/favicon.ico',
+]
+
 export function UnderConstructionGate({ isUnderConstruction: envUnderConstruction, children }: UnderConstructionGateProps) {
   const { user } = useAuthContext()
+  const pathname = usePathname()
   const [isUnderConstruction, setIsUnderConstruction] = useState(envUnderConstruction)
   const [loading, setLoading] = useState(true)
   
   // Allow ADMIN users to bypass under construction page
   const isAdmin = user?.role === 'ADMIN'
+  
+  // Check if current route should be excluded from under construction
+  const isExcludedRoute = EXCLUDED_ROUTES.some(route => pathname?.startsWith(route))
   
   // Check database for under construction setting
   useEffect(() => {
@@ -44,7 +61,8 @@ export function UnderConstructionGate({ isUnderConstruction: envUnderConstructio
     return <ConditionalLayout>{children}</ConditionalLayout>
   }
   
-  if (isUnderConstruction && !isAdmin) {
+  // Don't show under construction page for excluded routes or admin users
+  if (isUnderConstruction && !isAdmin && !isExcludedRoute) {
     return <UnderConstruction />
   }
   
