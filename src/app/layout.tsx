@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/Footer'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { MasqueradeProvider } from '@/contexts/MasqueradeContext'
 import { UnderConstructionGate } from '@/components/UnderConstructionGate'
+import { prisma } from '@/lib/prisma'
 
 const beVietnamPro = Be_Vietnam_Pro({ 
   subsets: ['latin'],
@@ -32,24 +33,49 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+async function getUnderConstructionStatus(): Promise<boolean> {
+  try {
+    // Check database first
+    const setting = await prisma.platformSettings.findUnique({
+      where: { key: 'underConstruction' },
+    })
+    
+    if (setting?.value === 'true') {
+      return true
+    }
+    
+    // Fallback to environment variable
+    const envValue = process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION
+    return (
+      envValue === 'true' ||
+      envValue === 'True' ||
+      envValue === 'TRUE' ||
+      envValue === '1'
+    )
+  } catch (error) {
+    console.error('Error checking under construction status:', error)
+    // Fallback to environment variable on error
+    const envValue = process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION
+    return (
+      envValue === 'true' ||
+      envValue === 'True' ||
+      envValue === 'TRUE' ||
+      envValue === '1'
+    )
+  }
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  // Check if under construction mode is enabled
-  // Handle both string "true" and boolean true, case-insensitive
-  const underConstructionEnv = process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION
-  const isUnderConstruction = 
-    underConstructionEnv === 'true' || 
-    underConstructionEnv === 'True' || 
-    underConstructionEnv === 'TRUE' ||
-    underConstructionEnv === '1'
+  // Check if under construction mode is enabled (server-side)
+  const isUnderConstruction = await getUnderConstructionStatus()
 
   // Debug logging (only in development)
   if (process.env.NODE_ENV === 'development') {
     console.log('🔧 Under Construction Mode:', {
-      envValue: underConstructionEnv,
       isEnabled: isUnderConstruction
     })
   }
