@@ -17,13 +17,14 @@ const EXCLUDED_ROUTES = [
   '/signup/creator',
   '/signup/clipper',
   '/forgot-password',
+  '/admin',
   '/api',
   '/_next',
   '/favicon.ico',
 ]
 
 export function UnderConstructionGate({ isUnderConstruction, children }: UnderConstructionGateProps) {
-  const { user } = useAuthContext()
+  const { user, loading } = useAuthContext()
   const pathname = usePathname()
   
   // Allow ADMIN users to bypass under construction page
@@ -31,6 +32,12 @@ export function UnderConstructionGate({ isUnderConstruction, children }: UnderCo
   
   // Check if current route should be excluded from under construction
   const isExcludedRoute = EXCLUDED_ROUTES.some(route => pathname?.startsWith(route))
+  
+  // Wait for auth to load before showing under construction page
+  // This prevents showing it to admins while their auth is still loading
+  if (loading) {
+    return <ConditionalLayout>{children}</ConditionalLayout>
+  }
   
   // Don't show under construction page for excluded routes or admin users
   if (isUnderConstruction && !isAdmin && !isExcludedRoute) {
