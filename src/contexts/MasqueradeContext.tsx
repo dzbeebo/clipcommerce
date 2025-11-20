@@ -96,7 +96,7 @@ export function MasqueradeProvider({ children }: { children: ReactNode }) {
       }
 
       // Reload to return to admin view
-      window.location.href = '/admin/settings'
+      window.location.href = '/admin'
     } catch (error) {
       console.error('Error stopping masquerade:', error)
       throw error

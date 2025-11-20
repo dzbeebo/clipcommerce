@@ -116,7 +116,7 @@ ENCRYPTION_KEY=your_32_character_encryption_key
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-**Note:** Under construction mode is now controlled through the admin settings page (`/admin/settings`), not environment variables. Admins can toggle it on/off directly from the dashboard.
+**Note:** Under construction mode is now controlled through the admin dashboard (`/admin`), not environment variables. Admins can toggle it on/off directly from the Settings tab in the admin dashboard.
 ```
 
 4. **Set up the database**
