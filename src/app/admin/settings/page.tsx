@@ -73,7 +73,7 @@ interface PlatformSettings {
 }
 
 export default function AdminSettingsPage() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const { isMasquerading, stopMasquerade, originalUser } = useMasquerade()
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
@@ -148,10 +148,12 @@ export default function AdminSettingsPage() {
       
       toast.success('Settings saved successfully')
       
-      // Reload page to apply under construction changes
+      // Redirect to home page to see under construction changes
+      // This ensures the server-side check in layout runs fresh
       if (platformSettings.underConstruction !== undefined) {
         setTimeout(() => {
-          window.location.reload()
+          // Redirect to home to see the under construction page if enabled
+          window.location.href = '/'
         }, 1000)
       }
     } catch (error) {
@@ -234,6 +236,19 @@ export default function AdminSettingsPage() {
     fetchUsers()
   }, [roleFilter, searchTerm])
 
+  // Show loading state while auth is being checked
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Check access after auth has loaded
   if (!user || user.role !== 'ADMIN') {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
