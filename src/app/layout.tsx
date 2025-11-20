@@ -35,33 +35,18 @@ export const metadata: Metadata = {
 
 async function getUnderConstructionStatus(): Promise<boolean> {
   try {
-    // Check database first
+    // Check database setting (controlled through admin settings)
     const setting = await prisma.platformSettings.findUnique({
       where: { key: 'underConstruction' },
     })
     
-    if (setting?.value === 'true') {
-      return true
-    }
-    
-    // Fallback to environment variable
-    const envValue = process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION
-    return (
-      envValue === 'true' ||
-      envValue === 'True' ||
-      envValue === 'TRUE' ||
-      envValue === '1'
-    )
+    // Only enable if explicitly set to 'true' in database
+    // Default to false if setting doesn't exist
+    return setting?.value === 'true'
   } catch (error) {
     console.error('Error checking under construction status:', error)
-    // Fallback to environment variable on error
-    const envValue = process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION
-    return (
-      envValue === 'true' ||
-      envValue === 'True' ||
-      envValue === 'TRUE' ||
-      envValue === '1'
-    )
+    // Default to false on error
+    return false
   }
 }
 

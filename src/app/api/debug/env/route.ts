@@ -10,15 +10,12 @@ export async function GET() {
   
   return NextResponse.json({
     underConstruction: {
-      envValue: process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION,
-      isEnabled: process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION === 'true' || 
-                 process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION === 'True' || 
-                 process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION === 'TRUE' ||
-                 process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION === '1',
-      type: typeof process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION,
+      note: 'Under construction mode is now controlled through admin settings (/admin/settings), not environment variables.',
+      envValue: process.env.NEXT_PUBLIC_UNDER_CONSTRUCTION || 'Not used (database-controlled)',
+      isEnabled: 'Check database PlatformSettings table with key "underConstruction"',
     },
     environment: process.env.NODE_ENV,
-    note: 'Visit this endpoint to verify the environment variable is set correctly. Remember to redeploy after adding environment variables in Vercel.',
+    note: 'Under construction mode is controlled through the admin settings page, not environment variables.',
   }, {
     headers: {
       'Cache-Control': 'no-store',
